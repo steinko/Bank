@@ -4,7 +4,22 @@ plugins {
 	id 'org.springframework.boot' version '2.2.6.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
-    id 'checkstyle'
+  id 'checkstyle' 
+  id 'jacoco'
+	id "org.sonarqube" version "2.7.1"
+}
+
+sonarqube {
+    properties {
+		property "sonar.host.url","https://sonarcloud.io"
+    property "sonar.sourceEncoding", "UTF-8"
+		property "sonar.login", "43983a01ea79d77e7ce4931e989733cdcfb6ef47"
+		property "sonar.projectKey", "Bank"
+		property "sonar.organization" , "steinko-github"
+    property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
+    property "sonar.sources", "src/main/java"
+		property "sonar.tests", "src/test/java"
+		}
 }
 
 
@@ -14,7 +29,6 @@ version = '0.0.1-SNAPSHOT'
 repositories {
 	mavenCentral()
 	maven { url "http://dl.bintray.com/epam/reportportal" } 
-
 }
 
 
@@ -39,4 +53,11 @@ test {
 
 task myJavadocs(type: Javadoc) {
   source = sourceSets.main.allJava
+}
+
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
 }
