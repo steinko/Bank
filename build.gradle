@@ -19,6 +19,7 @@ sonarqube {
     property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
     property "sonar.sources", "src/main/java"
 		property "sonar.tests", "src/test/java"
+		property "sonar.java.source", "14"
 		}
 }
 

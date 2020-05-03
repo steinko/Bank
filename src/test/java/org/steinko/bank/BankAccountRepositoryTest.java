@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * Test for BankAccount class.
  */
-@ExtendWith(SpringExtension.class)
+//@ExtendWith(SpringExtension.class)
 @DataJpaTest
 public class BankAccountRepositoryTest {
        /**
