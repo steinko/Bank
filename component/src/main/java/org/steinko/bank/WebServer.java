@@ -23,7 +23,7 @@ public class WebServer {
    public CommandLineRunner createBank(BankRepository bankRepository ) {
    
 	   return args -> {
-	    Bank bank = Bank.create();
+	    Bank bank = new Bank();
 	    bank.createCustomer("", 0L, 101L, 4567);
 	    Customer customer = bank.findCustomerByCustomerNumber(101L);
 	    BankAccount savingAccount = customer.savingAccount();

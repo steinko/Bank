@@ -14,7 +14,7 @@ public class BankTest {
     @BeforeEach 
     public void setUp()
     {
-    	     bank = Bank.create();
+    	     bank = new Bank();
     	     personId = 26076144574l;
     	     bank.createCustomer("Stein Korsveien",personId,106l,1234);
     	     bank.createCustomer("Oddmund Korsveien",234556l,100l,1234);
