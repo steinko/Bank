@@ -2,5 +2,5 @@ language: java
 install:
 
 script:
-  - ./gradlew test
-  - ./gradlew checkstyleMain
+  - ./component/gradlew test
+  - ./component/gradlew checkstyleMain
