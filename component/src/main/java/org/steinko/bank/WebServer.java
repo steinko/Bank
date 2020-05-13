@@ -18,9 +18,14 @@ public class WebServer {
    public static void main(String[] args) {
        SpringApplication.run(WebServer.class, args);
    }
-
+   
+   /**
+    * Create bank. 
+    * @param bankRepository
+    * @return command line runner
+    */
    @Bean
-   public CommandLineRunner createBank(BankRepository bankRepository ) {
+   public CommandLineRunner createBank(BankRepository bankRepository) {
    
 	   return args -> {
 	    Bank bank = new Bank();

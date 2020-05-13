@@ -48,10 +48,9 @@ public class CustomerControllerIT  {
 
   @Test
   void shoulCreatCustomer() throws JsonProcessingException{
-	  
-	   
 	   given()
 	      .webAppContextSetup(webApplicationContext)
+	      .param("personId","26076144574")
 	   .when()
         .post(url)
       .then()

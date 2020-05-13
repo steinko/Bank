@@ -28,7 +28,7 @@ public class CreateCustomerSteps implements En {
 	});
 
 	When("I create person", () -> {
-		
+		RestAssured.baseURI = "localhost:9001";
 	     when().
          post("/customer").
         then().
