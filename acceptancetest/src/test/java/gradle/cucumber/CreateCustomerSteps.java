@@ -1,6 +1,8 @@
 package gradle.cucumber;
 
-import io.cucumber.java8.En;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
+import io.cucumber.java.en.Then;
 
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.*;
@@ -14,54 +16,64 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import  static net.logstash.logback.argument.StructuredArguments.keyValue;
 
-public class CreateCustomerSteps implements En {
+public class CreateCustomerSteps  {
 	/**
 	 * Logger.
 	 */
 	private static Logger logger = 
 			LoggerFactory.getLogger(CreateCustomerSteps.class);
 	
+	private Integer number;
+	private String name;
+	private Long personId;
+	private Integer pin;
 	
-	public CreateCustomerSteps() {
-	
-	Given("Customer number {int}", (Integer int1) -> {
-	   
-	});
+	@Given("Customer number {int}")
+	public void customer_number(Integer number) {
+	    this.number = number;
+	}
 
-	Given("customer name {string}", (String string) -> {
-	   
-	});
+	@Given("customer name {string}")
+	public void customer_name(String name) {
+	   this.name = name;
+	}
 
-	Given("person number {long}", (Long int1) -> {
-	   
-	});
+	@Given("person id {long}")
+	public void person_id(Long personId) {
+	    this.personId = personId;
+	}
 
-	Given("pin {int}", (Integer int1) -> {
-	   
-	});
+	@Given("pin {int}")
+	public void pin(Integer pin) {
+	    this.pin = pin;
+	}
 
-	When("I create person", () -> {
-		RestAssured.baseURI = "localhost:9001";
+	@When("I create person")
+	public void i_create_person() {
+		
+        JSONObject  body =  new  JSONObject();
 		
 		try {	
-			   JSONObject  body =  new  JSONObject();
-			   body.put("personId","26076144574");
+			   body.put("personId",personId.toString());
 		    } catch (JSONException ex ) {
 			   logger.info("Error in put personid" + " {}",keyValue("category", "component"));
 			   throw new JSONException(ex);
 			}
 		
+		given().
+		  contentType("application/json").
+		  body(body.toString()).
 	     when().
-         post("/customer").
-         
-        then().
+           post("http://localhost:9001/customer").  
+         then().
           statusCode(201);   
-	});
-
-	Then("A customer is created in the bank", () -> {
-	   
-	});
-	
 	}
 
-}
+	@Then("A customer is created in the bank")
+	public void a_customer_is_created_in_the_bank() {
+	    
+	}
+
+	
+	
+}	
