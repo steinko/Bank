@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestClientException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import  static net.logstash.logback.argument.StructuredArguments.keyValue;
+
 
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -24,6 +26,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.get;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 
+import org.json.JSONObject;
+import org.json.JSONException;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -38,7 +42,7 @@ public class CustomerControllerIT  {
   @BeforeEach
   void setUp()  {
 	url =  "http://localhost:" + localServerPort + "/customer";
-	logger.info(url);	
+	logger.info("url: " + url, keyValue("category", "component"));	
   }
   
   @Autowired
@@ -47,10 +51,14 @@ public class CustomerControllerIT  {
   
 
   @Test
-  void shoulCreatCustomer() throws JsonProcessingException{
+  void shoulCreatCustomer() throws JSONException {
+	   JSONObject  body =  new  JSONObject();
+	   body.put("personId","26076144574");
+	   logger.info("person Id: " + body.toString(),keyValue("category", "component"));
 	   given()
 	      .webAppContextSetup(webApplicationContext)
-	      .param("personId","26076144574")
+	      .contentType("application/json")
+	      .body(body.toString())
 	   .when()
         .post(url)
       .then()
