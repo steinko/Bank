@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,34 +49,25 @@ public class CustomerController {
 	 * @param customer customer data
 	 * @param response response
 	 */
-	@ResponseStatus(HttpStatus.CREATED)
+
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public void createCustomer(@RequestBody CustomerDto customer,
-			                   HttpServletResponse response) {
+	public ResponseEntity<String> createCustomer(@RequestBody CustomerDto customer) {
 		
-		try { 
+		
 			  logger.info("customer id: " + customer.getPersonId(),keyValue("category", "component"));
 			                               
-		      if (customer.getPersonId() == "26076144444") {
+		      if (customer.getPersonId().equals("26076144444")) {
 		    	  logger.info("person id  alredy exists",keyValue("category", "component"));
-			      throw new CustomerExistException(
-			      "Person with this person Id already exist");  }
+			      return new ResponseEntity(HttpStatus.CONFLICT);
+		      } 
 			  else  {
 			      logger.info("person id do not exists",keyValue("category", "component"));
-			      
+			      return new ResponseEntity(HttpStatus.CREATED);
 			 } 
-		  
-		} catch (CustomerExistException exc) { 
-			  logger.info("Person with this person Id already exist",keyValue("category", "component"));
-			  throw new ResponseStatusException(
-			  HttpStatus.CONFLICT, 
-			  "Person with this person Id already exist",
-			  exc);
-		}
 		
 	}
 	
-	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(value = "/{personId}")
 	public CustomerDto getCustomer(@PathVariable Long personId){
 		return new CustomerDto();

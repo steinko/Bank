@@ -45,7 +45,7 @@ public class CustomerControllerTest {
 	        .statusCode(CREATED.value());
 	  }
 	
-	@Disabled
+	
 	@Test
 	  public void shouldThrowExeption() throws JSONException {
 	    
