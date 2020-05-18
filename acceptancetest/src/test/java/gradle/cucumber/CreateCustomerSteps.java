@@ -55,6 +55,8 @@ public class CreateCustomerSteps  {
 		
 		try {	
 			   body.put("personId",personId.toString());
+			   body.put("name", name);
+			   body.put("pin", pin.toString());
 		    } catch (JSONException ex ) {
 			   logger.info("Error in put personid" + " {}",keyValue("category", "component"));
 			   throw new JSONException(ex);
@@ -71,6 +73,13 @@ public class CreateCustomerSteps  {
 
 	@Then("A customer is created in the bank")
 	public void a_customer_is_created_in_the_bank() {
+		given().
+		  pathParam("personId", personId). 
+	     when().
+         get("http://localhost:9001/customer/{personId}").  
+       then().
+        statusCode(200);
+		
 	    
 	}
 

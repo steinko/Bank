@@ -3,11 +3,18 @@ package org.steinko.bank;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.servlet.http.HttpServletResponse;  
@@ -20,8 +27,9 @@ import  static net.logstash.logback.argument.StructuredArguments.keyValue;
  * Customer Controller.
  */
 @CrossOrigin(origins = "*")
-@RestController("customerController")
-public final class CustomerController {
+@RestController
+@RequestMapping("/customer")
+public class CustomerController {
 	/**
 	 * Logger.
 	 */
@@ -41,7 +49,7 @@ public final class CustomerController {
 	 * @param response response
 	 */
 	@ResponseStatus(HttpStatus.CREATED)
-	@PostMapping(value = "/customer", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public void createCustomer(@RequestBody CustomerDto customer,
 			                   HttpServletResponse response) {
 		
@@ -66,4 +74,21 @@ public final class CustomerController {
 		}
 		
 	}
+	
+	
+	@GetMapping(value = "/{personId}")
+	public CustomerDto getCustomer(@PathVariable Long personId){
+		return new CustomerDto();
+	}
+	
+	@DeleteMapping(value = "/{personId}")
+	@ResponseStatus(HttpStatus.OK)
+	public void deleteCustomer(@PathVariable Long personId){
+	}
+	
+	@PutMapping(value = "/{personId}" , produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void updateCustomer(@PathVariable Long personId , @RequestBody CustomerDto customer ){
+	}
+	
 }

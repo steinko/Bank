@@ -8,6 +8,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 
 import static io.restassured.http.ContentType.JSON;
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 import static org.hamcrest.CoreMatchers.equalTo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -41,7 +42,7 @@ public class CustomerControllerIT  {
 	 
   @BeforeEach
   void setUp()  {
-	url =  "http://localhost:" + localServerPort + "/customer";
+	url =  "http://localhost:" + localServerPort;
 	logger.info("url: " + url, keyValue("category", "component"));	
   }
   
@@ -60,11 +61,24 @@ public class CustomerControllerIT  {
 	      .contentType("application/json")
 	      .body(body.toString())
 	   .when()
-        .post(url)
+        .post(url + "/customer")
       .then()
         .statusCode(CREATED.value());
       
   } 
+  
+  @Test
+  void shoulGetCustomerDetails() throws JSONException {
+	   
+	   given()
+	      .webAppContextSetup(webApplicationContext)
+	   .when()
+        .get(url + "/customer/{personId}",26076144574L)
+      .then()
+        .statusCode(OK.value());
+      
+  } 
+  
  }
 
 
