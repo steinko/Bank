@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+   <appender name="STASH" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>/Users/steinkorsveien/Development/ATM/Bank1/component/bank.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <fileNamePattern>/Users/steinkorsveien/Development/ATM/Bank1/component/bank.%d{yyyy-MM-dd}.log</fileNamePattern>
+        <maxHistory>7</maxHistory>
+    </rollingPolicy>  
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+   </appender>
+
+<root level="DEBUG">
+    <appender-ref ref="STASH" />        
+</root>
+</configuration>
