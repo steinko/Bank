@@ -35,25 +35,25 @@ public class BankRepositoryTest  {
 	@Test
 	public void shouldFindNoBanks() {
 		Iterable<Bank> banks = bankRepository.findAll();
-				assertThat(banks).isEmpty();
+		assertThat(banks).isEmpty();
 				
 	}	
 	
 	 @Test
-		public void shuoldFindOneBank() {
-		       Bank bank = new Bank();
-			   bankRepository.save(bank);
-			    long banks =   bankRepository.count();
-			    assertEquals(1l,banks);
-			  }
+	public void shuoldFindOneBank() {
+		 Bank bank = new Bank();
+		 bankRepository.save(bank);
+		 Long banks =   bankRepository.count();
+			  assertEquals(1l,banks);
+	}
 	 
 	 @Test
-		public void shouldDeleteAllBanks() {
+	 public void shouldDeleteAllBanks() {
 		 Bank bank = new Bank();
 		 bankRepository.save(bank);
 		 bankRepository.deleteAll();
 		 assertThat( bankRepository.findAll()).isEmpty();
-		} 
+	} 
 
 }
 

@@ -8,6 +8,7 @@ import io.restassured.RestAssured;
 import static io.restassured.RestAssured.*;
 import static io.restassured.matcher.RestAssuredMatchers.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SettInnSteps {
 	
@@ -27,19 +28,19 @@ public class SettInnSteps {
            get("http://localhost:9001/savingsaccount/{personId}").  
          then().
            statusCode(200).
-           .body("balance",equalTo(balance));
+           body("balance",equalTo(balance));
 	}
 
 	@When("jeg setter inn {int} kr")
 	public void jeg_setter_inn_kr(Integer amount) {
-	 body =	 given().
+	  given().
 		  pathParam("personId", personId). 
 		  param("amount", amount).
 	     when().
          put("http://localhost:9001/savingsaccount/{personId}").  
        then().
-         statusCode(200).
-         log().body();
+         statusCode(200);
+         //log().body();
          
 	}
 

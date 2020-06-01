@@ -37,13 +37,14 @@ public class CustomerController {
 	/**
 	 * Customer service.
 	 */
-	@Autowired
-	private CustomerService service;
+	
+	private final CustomerService service;
 	
 	/**
 	 * Constructor.
 	 */
-	public CustomerController() {
+	public CustomerController(CustomerService service) {
+		this.service = service;
 		
 	}
 	

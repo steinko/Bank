@@ -22,6 +22,7 @@ import  static net.logstash.logback.argument.StructuredArguments.keyValue;
 
 import static org.mockito.Mockito.when;
 
+import org.mockito.Mock;
 import org.mockito.InjectMocks;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -32,30 +33,33 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.hamcrest.Matchers.equalTo;
 
 
-@WebMvcTest(BankAccountController.class)
+
 @ExtendWith(MockitoExtension.class)
 public class BankAccoutControllerTest {
 	
-	@InjectMocks
+	
+    @InjectMocks
 	BankAccountController controller;
 	
-	@MockBean
+	@Mock
 	BankAccountService service;
+	
+	
 	
 	@Test
 	void getSavingBankAccount() {
 		  Long personId = 26076144574L;
 		  Integer amount = 400;
-		 BankAccount savingAccount = new BankAccount(amount);
-		 when(service.getSavingsAccount(personId)).thenReturn(savingAccount);
+		  BankAccount savingAccount = new BankAccount(amount);
+		  when(service.getSavingsAccount(personId)).thenReturn(savingAccount);
 		 
-		 given()
-	      .standaloneSetup(controller)
-	    .when()
-          .get("/savingsaccount/{personId}", personId)
-        .then()
-       . statusCode(OK.value())
-       .body("balance",equalTo(amount)); 
+		  given()
+	        .standaloneSetup(controller)
+	      .when()
+            .get("/savingsaccount/{personId}", personId)
+          .then()
+             .statusCode(OK.value())
+             .body("balance",equalTo(amount)); 
 	}
 	
 	
@@ -63,17 +67,17 @@ public class BankAccoutControllerTest {
 	void depositToSavingsBankAccount() {
 		  Long personId = 26076144574L;
 		  Integer amount = 400;
-		 BankAccount savingAccount = new BankAccount(700);
+		  BankAccount savingAccount = new BankAccount(700);
 		 
-		 when(service.depositToSavingsAccount(personId,amount)).thenReturn(savingAccount);
+		  when(service.depositToSavingsAccount(personId,amount)).thenReturn(savingAccount);
 		 
-		 given()
-	      .standaloneSetup(controller)
-	    .when()
-          .put("/savingsaccount/{personId}/{amount}", personId, amount)
-        .then()
-       . statusCode(OK.value())
-       .body("balance",equalTo(700)); 
+		  given()
+	        .standaloneSetup(controller)
+	      .when()
+            .put("/savingsaccount/{personId}/{amount}", personId, amount)
+          .then()
+            .statusCode(OK.value())
+            .body("balance",equalTo(700)); 
 	}
 	
 

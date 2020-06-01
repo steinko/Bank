@@ -2,6 +2,7 @@ package org.steinko.bank.customer;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Disabled;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -26,7 +27,10 @@ import org.slf4j.LoggerFactory;
 import  static net.logstash.logback.argument.StructuredArguments.keyValue;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.reset;
+import static org.mockito.BDDMockito.given;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -35,10 +39,15 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.boot.test.context.TestConfiguration;
+
 
 
 @ExtendWith(MockitoExtension.class)
@@ -50,9 +59,9 @@ public class CustomerControllerTest {
 	private static Logger logger = 
 			LoggerFactory.getLogger(CustomerControllerTest.class);
 	
+	
 	@Mock
 	private CustomerService service;
-	
 	
 	
 	@InjectMocks
@@ -61,7 +70,9 @@ public class CustomerControllerTest {
 	@BeforeEach 
 	public void setUp() {
 		 RestAssuredMockMvc.standaloneSetup(controller);
+		 
 	}
+	
 	
 	
 	@Test
@@ -75,7 +86,7 @@ public class CustomerControllerTest {
 	    
 	    logger.info("CustomerDto.toString " + body.toString() ,keyValue("category", "component"));
 	    
-	    when(service.createCustomer(any(Customer.class))).thenReturn(customer);
+	    given(service.createCustomer(any(Customer.class))).willReturn(customer);
 	    
 	    String url = "/customer";
 	    
@@ -97,7 +108,7 @@ public class CustomerControllerTest {
 	  void shoulGetCustomerDetails() throws JSONException {
 		   Long personId = 26076144574L;
 		   Customer customer = new Customer("",personId,0L,0 );
-		   when(service.getCustomer(personId)).thenReturn(customer);
+		   given(service.getCustomer(personId)).willReturn(customer);
 		   
 		   given()
 		    //  .standaloneSetup(controller)
@@ -124,11 +135,11 @@ public class CustomerControllerTest {
 	  void shoulUpdateCustomer() throws JSONException {
 		
 		   Long personId = 26076144574L;
-		   CustomerDto  body =  new  CustomerDto();
+		   CustomerDto body =  new  CustomerDto();
 	       body.setPersonId(personId);
 	    
-		   Customer customer = new Customer("",personId,0L,0 );
-		   when(service.updateCustomer(any(Customer.class))).thenReturn(customer);
+	       Customer customer = new Customer("",personId,0L,0 );
+		   given(service.updateCustomer(any(Customer.class))).willReturn(customer);
 	    
 		   given()
 		      .contentType("application/json")
@@ -143,8 +154,7 @@ public class CustomerControllerTest {
 	@Test 
 	 void  shouldReurnPersonId() {
 		Customer customer = new Customer( "", 26076144679L, 0L, 0);
-		CustomerController customerController = new CustomerController();
-		CustomerDto customerDto = customerController.convertToDto(customer);
+		CustomerDto customerDto = controller.convertToDto(customer);
 		assertEquals(customerDto.getPersonId(),26076144679L);
 	}
 	
@@ -152,8 +162,7 @@ public class CustomerControllerTest {
 	 void  shouldReurnCustomerWithPeronId() throws ParseException {
 		CustomerDto customerDto  = new CustomerDto();
 		customerDto.setPersonId(26076144679L);
-		CustomerController customerController = new CustomerController();
-		Customer customer = customerController.convertToEntity(customerDto);
+		Customer customer = controller.convertToEntity(customerDto);
 		assertEquals(customer.getPersonId(),26076144679L);
 	}
 	

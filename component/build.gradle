@@ -1,9 +1,13 @@
+
+
+
 plugins{
   id 'java'
   id 'checkstyle' 
   id 'jacoco'
   id "org.sonarqube" version "2.8"
   id "org.springframework.boot" version "2.3.0.RELEASE"
+  id 'info.solidsoft.pitest' version '1.5.1'
 }
 
 group = 'org.steinko'
@@ -67,11 +71,15 @@ dependencies {
 	intTestImplementation 'org.arquillian.cube:arquillian-cube-docker:1.18.2'
   intTestImplementation 'org.arquillian.cube:assertj-docker-java:1.18.2'
   intTestImplementation 'org.assertj:assertj-core:3.16.1'
+  intTestImplementation 'com.tngtech.archunit:archunit-junit5:0.14.1'
 }
 	 
 test {
 	useJUnitPlatform()
 }
+
+
+
 
 task myJavadocs(type: Javadoc) {
   source = sourceSets.main.allJava
@@ -93,6 +101,13 @@ task integrationTest(type: Test) {
 }
 
 check.dependsOn integrationTest
+check.dependsOn 'pitest'
+
+
+bootRun.dependsOn build
+
+build.dependsOn 'pitest'
+
 
 project.tasks["sonarqube"].dependsOn "jacocoTestReport"
 

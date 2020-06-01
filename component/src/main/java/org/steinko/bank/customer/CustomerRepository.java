@@ -8,10 +8,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 @Repository
 public interface CustomerRepository  extends JpaRepository<Customer, Long> {
+	
 	/**
 	 * Find customer by person id.
 	 * @param personId person id
 	 * @return customer
 	 */
-   Customer findByPersonId(Long personId);
+    Customer findByPersonId(Long personId);
+   
+   /**
+    * Deletet customer by person id.
+    * @param personId person id
+    * @return id
+    */
+    Long deleteByPersonId(Long personId);
 }

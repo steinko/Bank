@@ -1,6 +1,7 @@
 language: java
-install:
+jdk: openjdk14
+install: 
 
 script:
-  - ./gradlew :component:test
+  - ./gradlew :component: check
   

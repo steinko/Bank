@@ -66,33 +66,43 @@ public class CustomerControllerIT  {
   void shoulCreatCustomer() throws JSONException {
 	  
 	   logger.info("start integration test should create customer " ,keyValue("category", "component"));
-	   Customer customer = new Customer("Stein Korsveiene",26076144575L,6789L,987 );
+	   Long personId = 26076144574L;
 	   CustomerDto body = new CustomerDto();
-	   body.setPersonId(26076144574L);
-	    
-	   when(service.createCustomer(customer)).thenReturn(customer);  
+	   body.setPersonId(personId);
+	      
 	   logger.info("person Id: " + body.toString(),keyValue("category", "component"));
 	   
 	   given()
 	      .webAppContextSetup(webApplicationContext)
 	      .contentType("application/json")
-	      .body(body.toString())
+	      .body(body)
 	   .when()
-        .post(url + "/customer")
-      .then()
-        .statusCode(CREATED.value());
+         .post(url + "/customer")
+       .then()
+          .statusCode(CREATED.value())
+          .body("personId", equalTo(personId));
+	   
+	    given()
+	      .webAppContextSetup(webApplicationContext)
+	    .when()
+          .get(url + "/customer/{personId}",personId)
+        .then()
+          .statusCode(OK.value())
+	      .body("personId", equalTo(personId));
+	   
 	   logger.info("end integration test should create customer " ,keyValue("category", "component"));
   } 
   
   @Test
   void shoulGetCustomerDetails() throws JSONException {
-	   
+	   Long personId = 26076144444L;
 	   given()
 	      .webAppContextSetup(webApplicationContext)
 	   .when()
-        .get(url + "/customer/{personId}",26076144574L)
+        .get(url + "/customer/{personId}",personId)
       .then()
-        .statusCode(OK.value());
+        .statusCode(OK.value())
+	    .body("personId", equalTo(personId));
       
   } 
   

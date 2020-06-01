@@ -1,11 +1,8 @@
 package org.steinko.bank.bank;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -127,43 +124,5 @@ public class Bank implements Serializable {
 		   return null;
 	    }
 	
-	/**
-	 * Create customers from file.
-	 */
-	public void createCustomersFromFile() { 
-	    customers = new ArrayList<>();
-		File file;
-		file = new File("src/test/resources/Customers");
-		Long customerNumber;
-		int pin;
-		String surname;
-		String familyname;
-		String name;
-		Long personId;
-		Customer customer;
-		Scanner scanner = null;
-		try {
-			scanner = new Scanner(file);
-			while (scanner.hasNext()) {
-				surname = scanner.next();
-				familyname = scanner.next();
-				name = surname + familyname;
-				personId = scanner.nextLong();
-				customerNumber = scanner.nextLong();
-				pin = scanner.nextInt();
-				customer = 
-				  new Customer(name, personId, 
-					customerNumber, pin);
-			    customers.add(customer);
-			}
-
-		} catch (FileNotFoundException e) {
-			LOGGER.error("File not found");
-		} finally {
-			if (scanner != null)  {
-			   scanner.close();
-		    }
-		}	
-	}
 }
 
