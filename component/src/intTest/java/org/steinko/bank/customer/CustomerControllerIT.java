@@ -36,34 +36,18 @@ import org.json.JSONException;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import static org.mockito.BDDMockito.when;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public class CustomerControllerIT  {
 	
-	
-	 @LocalServerPort
-	 private  int localServerPort;
-	 private String url;
-	 private static Logger logger = LogManager.getLogger(CustomerControllerIT.class);
+  private static Logger logger = LogManager.getLogger(CustomerControllerIT.class);
 	 
-  @BeforeEach
-  void setUp()  {
-	url =  "http://localhost:" + localServerPort;
-	logger.info("url: " + url, keyValue("category", "component"));	
-  }
-  
   @Autowired
   private WebApplicationContext webApplicationContext;
-  
-  
    
-  @MockBean
-	private CustomerService service;
-  
-  
 
   @Test
-  void shoulCreatCustomer() throws JSONException {
+  void shoulCreateCustomer() throws JSONException {
 	  
 	   logger.info("start integration test should create customer " ,keyValue("category", "component"));
 	   Long personId = 26076144574L;
@@ -77,7 +61,7 @@ public class CustomerControllerIT  {
 	      .contentType("application/json")
 	      .body(body)
 	   .when()
-         .post(url + "/customer")
+         .post("/customer")
        .then()
           .statusCode(CREATED.value())
           .body("personId", equalTo(personId));
@@ -85,10 +69,41 @@ public class CustomerControllerIT  {
 	    given()
 	      .webAppContextSetup(webApplicationContext)
 	    .when()
-          .get(url + "/customer/{personId}",personId)
+          .get( "/customer/{personId}",personId)
         .then()
           .statusCode(OK.value())
 	      .body("personId", equalTo(personId));
+	   
+	   logger.info("end integration test should create customer " ,keyValue("category", "component"));
+  } 
+  
+  @Test
+  void shoulNotFindCustomer() throws JSONException {
+	  
+	   logger.info("start integration test should not find customer " ,keyValue("category", "component"));
+	   Long personId = 26076144574L;
+	   CustomerDto body = new CustomerDto();
+	   body.setPersonId(personId);
+	      
+	   logger.info("person Id: " + body.toString(),keyValue("category", "component"));
+	   
+	   given()
+	      .webAppContextSetup(webApplicationContext)
+	      .contentType("application/json")
+	      .body(body)
+	   .when()
+         .post("/customer")
+       .then()
+          .statusCode(CREATED.value())
+          .body("personId", equalTo(personId));
+	   
+	    given()
+	      .webAppContextSetup(webApplicationContext)
+	    .when()
+          .get( "/customer/{26076144533}",personId)
+        .then()
+          .statusCode(OK.value()).
+          .body("personId", equalTo(null));
 	   
 	   logger.info("end integration test should create customer " ,keyValue("category", "component"));
   } 
@@ -99,11 +114,57 @@ public class CustomerControllerIT  {
 	   given()
 	      .webAppContextSetup(webApplicationContext)
 	   .when()
-        .get(url + "/customer/{personId}",personId)
+        .get( "/customer/{personId}",personId)
       .then()
         .statusCode(OK.value())
 	    .body("personId", equalTo(personId));
       
+  } 
+  
+  @Test
+  void shoulDeliverCustomers() throws JSONException {
+	  
+	   logger.info("start integration test should deliver customers " ,keyValue("category", "component"));
+	   Long personId = 26076144574L;
+	   CustomerDto person1 = new CustomerDto(personId);
+	   
+	   personId = 26076144575L;
+	   CustomerDto person2 = new CustomerDto(personId);
+	   
+	   CustomersDto customers = new CustomersDto();
+	   customers.add(person1);
+	   customers.add(person2);
+	      
+	   logger.info("person Id: " + body.toString(),keyValue("category", "component"));
+	   
+	   given()
+	      .webAppContextSetup(webApplicationContext)
+	      .contentType("application/json")
+	      .body(person1)
+	   .when()
+         .post("/customer")
+       .then()
+          .statusCode(CREATED.value());
+          
+	   given()
+	      .webAppContextSetup(webApplicationContext)
+	      .contentType("application/json")
+	      .body(person2)
+	   .when()
+      .post("/customer")
+    .then()
+       .statusCode(CREATED.value());
+       
+	   
+	    given()
+	      .webAppContextSetup(webApplicationContext)
+	    .when()
+          .get( "/customer")
+        .then()
+          .statusCode(OK.value())
+	      .body( equalTo(customers));
+	   
+	   logger.info("end integration test should deliver customers " ,keyValue("category", "component"));
   } 
   
  }

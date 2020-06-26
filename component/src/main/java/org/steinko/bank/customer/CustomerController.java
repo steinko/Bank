@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import  static net.logstash.logback.argument.StructuredArguments.keyValue;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.text.ParseException;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Customer Controller.
@@ -42,10 +42,10 @@ public class CustomerController {
 	
 	/**
 	 * Constructor.
+	 * @param service
 	 */
 	public CustomerController(CustomerService service) {
-		this.service = service;
-		
+		this.service = service;	
 	}
 	
 	/**
@@ -71,6 +71,18 @@ public class CustomerController {
 	         }      
         Customer customerCreated = service.createCustomer(customer);
         return convertToDto(customerCreated);
+	}
+	
+	/**
+	 * Get Customers API.
+	 * @param personId person id
+	 * @return Customer data. 
+	 */
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping
+	public List<CustomerDto> getCustomers() {
+		List<Customer> customers = service.getCustomers();
+		return convertToDto(customers);
 	}
 	
 	/**
@@ -125,12 +137,27 @@ public class CustomerController {
 
 	public CustomerDto convertToDto(Customer customer) {
 		//ModelMapper modelMapper = new ModelMapper();
-		CustomerDto customerDto = new CustomerDto();
-		customerDto.setPersonId(customer.getPersonId());
+		CustomerDto customerDto = new CustomerDto(customer.getPersonId());
 	    //CustomerDto customerDto = 
 		    //modelMapper.map(customer, CustomerDto.class);
 	    return customerDto;
 	}
+	
+	/**
+	 * Convert Customer to Customer data transfer object.
+	 * @param customer the customer
+	 * @return customer data
+	 */
+
+	public List<CustomerDto> convertToDto(List<Customer> customers) {
+		List<CustomerDto> customersDto = new ArrayList<CustomerDto>();
+		for(Customer customer:customers) {
+			CustomerDto cutomerDto = convertToDto(customer);
+			customersDto.add(cutomerDto);
+		}
+	    return customersDto;
+	}
+	
 	
 	
 	/**

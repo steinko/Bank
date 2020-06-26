@@ -4,14 +4,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import  static net.logstash.logback.argument.StructuredArguments.keyValue;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Customer service.
  */
 @Service
-public class CustomerServiceImp implements CustomerService{
+public class CustomerServiceImp implements CustomerService {
+	
 	/**
 	 * Customer repository.
 	 */
@@ -69,5 +71,12 @@ public class CustomerServiceImp implements CustomerService{
 	 */
 	public Customer updateCustomer(Customer customer) {		
 		return repository.save(customer);
+	}
+	
+	/**
+	 * Get a list of cutomers
+	 */
+	public List<Customer> getCustomers()  {	
+		return null;
 	}
 }

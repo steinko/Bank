@@ -9,5 +9,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BankAccountRepository
   extends JpaRepository<BankAccount, Long> {
+	/**
+	 * Get Customer by the persons id. 
+	 * @param personId
+	 * @return bank account
+	 */
 	BankAccount getByPersonId(Long personId);
 }

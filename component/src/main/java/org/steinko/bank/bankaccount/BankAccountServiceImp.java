@@ -5,14 +5,16 @@ package org.steinko.bank.bankaccount;
  */
 public class BankAccountServiceImp implements BankAccountService {
 	
+	/**
+	 * bank account repository.
+	 */
 	private final BankAccountRepository repository;
 	
 	/**
 	 * Creator.
 	 * @param repository Repository
 	 */
-	
-	public BankAccountServiceImp(BankAccountRepository repository){
+	public BankAccountServiceImp(BankAccountRepository repository) {
 		this.repository = repository;
 	}
 	
@@ -34,7 +36,8 @@ public class BankAccountServiceImp implements BankAccountService {
 	public BankAccount depositToSavingsAccount(
 			Long personId, 
 			Integer amount) {
-		BankAccount returnBankAccount = repository.getByPersonId(personId);
+		BankAccount returnBankAccount = 
+			repository.getByPersonId(personId);
 		returnBankAccount.gi(amount);
 		return returnBankAccount;
 	}

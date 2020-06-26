@@ -3,6 +3,8 @@ package org.steinko.bank.customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import  static net.logstash.logback.argument.StructuredArguments.keyValue;
+import com.fasterxml.jackson.annotation.JsonCreator; 
+import com.fasterxml.jackson.annotation.JsonProperty; 
 /**
  * Customer Data Transformation Object.
  */
@@ -22,6 +24,16 @@ public class CustomerDto {
 	 * Get person id.
 	 * @return person id
 	 */
+	
+	public CustomerDto() {
+		
+	}
+	
+	@JsonCreator
+	public CustomerDto(@JsonProperty("personId")  Long personId) {
+	   this.personId =  personId;
+	}
+	
 	public Long getPersonId() {
 		logger.info("getPersonId personId: " + personId + " {}", 
 				keyValue("category", "component"));

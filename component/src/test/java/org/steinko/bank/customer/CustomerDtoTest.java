@@ -22,7 +22,7 @@ public class CustomerDtoTest {
 	private ModelMapper modelMapper = new ModelMapper();
 	
 	@Test
-	public void shoulHavACorrctDto() {
+	public void shoulHaveACorrectDto() {
 		logger.info("start unit test shoulHavACorrctDto " ,keyValue("category", "component"));
 		Customer customer = new Customer("Stein Korsveien", 
 				26076144574L, 1234L, 5678);
@@ -34,8 +34,7 @@ public class CustomerDtoTest {
 	@Test
 	public void shoulReturnDto() {
 		logger.info("start unit test shoulReturnDto( " ,keyValue("category", "component"));
-		CustomerDto customer = new CustomerDto();
-		customer.setPersonId(26076144574L);
+		CustomerDto customer = new CustomerDto(26076144574L);
 		assertEquals(customer.toString(), "personId: 26076144574");
 		logger.info("end unit test shoulReturnDto( " ,keyValue("category", "component"));
 	}
@@ -43,9 +42,9 @@ public class CustomerDtoTest {
 	@Test
 	public void shoulReturnpersonId() {
 		logger.info("start unit test should houlReturnpersonId " ,keyValue("category", "component"));
-		CustomerDto customer = new CustomerDto();
-		customer.setPersonId(26076144574L);
-		assertThat(customer.getPersonId(), equalTo(26076144574L));
+		Long personId = 26076144574L;
+		CustomerDto customer = new CustomerDto(personId);
+		assertThat(customer.getPersonId(), equalTo(personId));
 		logger.info("end unit test shoulReturnpersonId " ,keyValue("category", "component"));
 	}
 

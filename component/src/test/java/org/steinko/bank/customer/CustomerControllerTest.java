@@ -16,6 +16,8 @@ import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.OK;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
@@ -35,11 +37,12 @@ import static org.mockito.BDDMockito.given;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,7 +51,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.annotation.Bean;
 import org.springframework.boot.test.context.TestConfiguration;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
 public class CustomerControllerTest {
@@ -81,8 +87,8 @@ public class CustomerControllerTest {
 		logger.info("start unit test should create customer " ,keyValue("category", "component"));
 		Long personId = 26076144575L;
 		Customer customer = new Customer("",personId,0L,0 );
-		CustomerDto body = new CustomerDto();
-	    body.setPersonId(personId);
+		CustomerDto body = new CustomerDto(personId);
+	   
 	    
 	    logger.info("CustomerDto.toString " + body.toString() ,keyValue("category", "component"));
 	    
@@ -103,6 +109,28 @@ public class CustomerControllerTest {
 	    logger.info("end unit test should create customer " ,keyValue("category", "component"));
 	  }
 	
+	@Test
+	  void shoulGetCustomersDetails() throws JSONException,JsonProcessingException {
+		   Long personId = 26076144574L;
+		   List<Customer> customers = new ArrayList<Customer>();
+		   Customer customer1 = new Customer("",personId,0L,0 );
+		   Customer customer2 = new Customer("",26892844574L,0L,0 );
+		   customers.add(customer1);
+		   customers.add(customer2);
+		   
+		   
+		   
+		   List<CustomerDto> customersDto = CustomerConverter.convertToDto(customers);
+		   String result = new ObjectMapper().writeValueAsString(customersDto);
+		   given(service.getCustomers()).willReturn(customers);
+		   
+		   given()
+		   .when()
+	        .get("customer")
+	      .then()
+	      .body(is(equalTo(result)))
+	        .statusCode(OK.value());  
+	  } 
 	
 	@Test
 	  void shoulGetCustomerDetails() throws JSONException {
@@ -111,7 +139,6 @@ public class CustomerControllerTest {
 		   given(service.getCustomer(personId)).willReturn(customer);
 		   
 		   given()
-		    //  .standaloneSetup(controller)
 		   .when()
 	        .get("customer/{personId}", personId)
 	      .then()
@@ -135,9 +162,8 @@ public class CustomerControllerTest {
 	  void shoulUpdateCustomer() throws JSONException {
 		
 		   Long personId = 26076144574L;
-		   CustomerDto body =  new  CustomerDto();
-	       body.setPersonId(personId);
-	    
+		   CustomerDto body =  new  CustomerDto(personId);
+	       
 	       Customer customer = new Customer("",personId,0L,0 );
 		   given(service.updateCustomer(any(Customer.class))).willReturn(customer);
 	    
@@ -160,10 +186,11 @@ public class CustomerControllerTest {
 	
 	@Test 
 	 void  shouldReurnCustomerWithPeronId() throws ParseException {
-		CustomerDto customerDto  = new CustomerDto();
-		customerDto.setPersonId(26076144679L);
+		Long personId = 26076144679L;
+		CustomerDto customerDto  = new CustomerDto(personId);
+	
 		Customer customer = controller.convertToEntity(customerDto);
-		assertEquals(customer.getPersonId(),26076144679L);
+		assertEquals(customer.getPersonId(),personId);
 	}
 	
 	
