@@ -28,17 +28,19 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
+	
 	/**
 	 * Logger.
 	 */
 	private static Logger logger = 
 			LoggerFactory.getLogger(CustomerController.class);
 	
+	
 	/**
 	 * Customer service.
 	 */
-	
 	private final CustomerService service;
+	
 	
 	/**
 	 * Constructor.
@@ -47,6 +49,7 @@ public class CustomerController {
 	public CustomerController(CustomerService service) {
 		this.service = service;	
 	}
+	
 	
 	/**
 	 * Create customer API.
@@ -73,10 +76,10 @@ public class CustomerController {
         return convertToDto(customerCreated);
 	}
 	
+	
 	/**
-	 * Get Customers API.
-	 * @param personId person id
-	 * @return Customer data. 
+	 * Get customers.
+	 * @return customers. 
 	 */
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping
@@ -85,9 +88,10 @@ public class CustomerController {
 		return convertToDto(customers);
 	}
 	
+	
 	/**
-	 * Get Customer API.
-	 * @param personId person id
+	 * Get the customer with a spesific person id.
+	 * @param personId person id to get
 	 * @return Customer data. 
 	 */
 	@ResponseStatus(HttpStatus.OK)
@@ -97,9 +101,10 @@ public class CustomerController {
 		return convertToDto(customer);
 	}
 	
+	
 	/**
-	 * Delete Customer API.
-	 * @param personId person id
+	 * Delete the customer with the spesific person id.
+	 * @param personId person id to delete
 	 */
 	@DeleteMapping(value = "/{personId}")
 	@ResponseStatus(HttpStatus.OK)
@@ -107,10 +112,11 @@ public class CustomerController {
 		     service.deleteCustomer(personId);
 	}
 	
+	
 	/**
-	 * Update Customer.
-	 * @param customerDto customer data transfer object
-	 * @return customer data
+	 * Update  the customer with the data from the data transfere object.
+	 * @param customerDto customer data transfer object.
+	 * @return customer data.
 	 */
 	@PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
@@ -129,35 +135,32 @@ public class CustomerController {
 	     return convertToDto(customerCreated);	
 	}
 	
+	
 	/**
-	 * Convert Customer to Customer data transfer object.
-	 * @param customer the customer
-	 * @return customer data
+	 * Convert Customer object to Customer data transfer object.
+	 * @param customer the Customer object to convert
+	 * @return data transfer object with converted data
 	 */
-
 	public CustomerDto convertToDto(Customer customer) {
-		//ModelMapper modelMapper = new ModelMapper();
-		CustomerDto customerDto = new CustomerDto(customer.getPersonId());
-	    //CustomerDto customerDto = 
-		    //modelMapper.map(customer, CustomerDto.class);
+		CustomerDto customerDto = 
+				new CustomerDto(customer.getPersonId());
 	    return customerDto;
 	}
 	
+	
 	/**
-	 * Convert Customer to Customer data transfer object.
-	 * @param customer the customer
-	 * @return customer data
+	 * Convert customer objects to customer data transfer objects.
+	 * @param customers  customer objects that should be converted.
+	 * @return data transfer objects with converted data.
 	 */
-
 	public List<CustomerDto> convertToDto(List<Customer> customers) {
 		List<CustomerDto> customersDto = new ArrayList<CustomerDto>();
-		for(Customer customer:customers) {
+		for (Customer customer:customers) {
 			CustomerDto cutomerDto = convertToDto(customer);
 			customersDto.add(cutomerDto);
 		}
 	    return customersDto;
 	}
-	
 	
 	
 	/**

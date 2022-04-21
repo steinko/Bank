@@ -74,7 +74,8 @@ public class CustomerServiceImp implements CustomerService {
 	}
 	
 	/**
-	 * Get a list of cutomers
+	 * Get cutomers.
+	 * @return customers
 	 */
 	public List<Customer> getCustomers()  {	
 		return null;

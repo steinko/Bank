@@ -1,13 +1,9 @@
-
-
-
 plugins{
   id 'java'
   id 'checkstyle' 
   id 'jacoco'
   id "org.sonarqube" version "2.8"
   id "org.springframework.boot" version "2.3.0.RELEASE"
-  id 'info.solidsoft.pitest' version '1.5.1'
 }
 
 group = 'org.steinko'
@@ -26,7 +22,6 @@ sonarqube {
 
 repositories {
 	mavenCentral()
-	maven { url "http://dl.bintray.com/epam/reportportal" } 
 }
 
 sourceSets {
@@ -37,55 +32,49 @@ sourceSets {
 }
 
 configurations {
-    intTestImplementation.extendsFrom implementation
-		intTestComile.extendsFrom testCompile
-    intTestRuntimeOnly.extendsFrom runtimeOnly
+        intTestImplementation.extendsFrom implementation
 }
 
 dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-web:2.2.7.RELEASE'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.2.7.RELEASE'
-  implementation 'io.springfox:springfox-swagger2:2.9.2'
-  implementation 'io.springfox:springfox-swagger-ui:2.9.2'
-  implementation 'net.logstash.logback:logstash-logback-encoder:6.3'
-  implementation 'org.modelmapper:modelmapper:2.3.7'
- // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
-compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.1'
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+    implementation 'net.logstash.logback:logstash-logback-encoder:6.3'
+    implementation 'org.modelmapper:modelmapper:2.3.7'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2.2'
+    implementation 'org.springframework.cloud:spring-cloud-gcp-starters:1.2.8.RELEASE'
 
-   // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-gcp-starters
-   compile group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starters', version: '1.2.3.RELEASE', ext: 'pom'
 
 
 	runtimeOnly 'com.h2database:h2:1.4.200'
 
 	testImplementation 'io.rest-assured:spring-mock-mvc:4.3.0'
 	testImplementation('org.springframework.boot:spring-boot-starter-test:2.2.7.RELEASE') 
-
-	testCompile group: 'org.jboss.arquillian', name: 'arquillian-bom', version: '1.7.0.Alpha1', ext: 'pom'
+	
+    testImplementation 'org.jboss.arquillian:arquillian-bom:1.7.0.Alpha10'
 	testImplementation 'org.jboss.arquillian.junit:arquillian-junit-container:1.7.0.Alpha1'
 	testImplementation 'org.arquillian.cube:arquillian-cube-docker:1.18.2'
-  testImplementation 'org.arquillian.cube:assertj-docker-java:1.18.2'
-  testImplementation 'org.assertj:assertj-core:3.16.1'
+    testImplementation 'org.arquillian.cube:assertj-docker-java:1.18.2'
+    testImplementation 'org.assertj:assertj-core:3.16.1'
 
 
 	intTestImplementation 'io.rest-assured:spring-mock-mvc:4.3.0'
 	intTestImplementation('org.springframework.boot:spring-boot-starter-test:2.2.7.RELEASE') 
 
-	intTestCompile  group: 'org.jboss.arquillian', name: 'arquillian-bom', version: '1.7.0.Alpha1', ext: 'pom'
+	
+    intTestImplementation 'org.jboss.arquillian:arquillian-bom:1.7.0.Alpha10'
 	intTestImplementation 'org.jboss.arquillian.junit:arquillian-junit-container:1.7.0.Alpha1'
 	intTestImplementation 'org.arquillian.cube:arquillian-cube-docker:1.18.2'
-  intTestImplementation 'org.arquillian.cube:assertj-docker-java:1.18.2'
-  intTestImplementation 'org.assertj:assertj-core:3.16.1'
-  intTestImplementation 'com.tngtech.archunit:archunit-junit5:0.14.1'
+    intTestImplementation 'org.arquillian.cube:assertj-docker-java:1.18.2'
+    intTestImplementation 'org.assertj:assertj-core:3.16.1'
+    intTestImplementation 'com.tngtech.archunit:archunit-junit5:0.14.1'
 }
 	 
 test {
 	useJUnitPlatform()
 }
-
-
-
 
 task myJavadocs(type: Javadoc) {
   source = sourceSets.main.allJava
@@ -107,13 +96,8 @@ task integrationTest(type: Test) {
 }
 
 check.dependsOn integrationTest
-check.dependsOn 'pitest'
-
 
 bootRun.dependsOn build
-
-build.dependsOn 'pitest'
-
 
 project.tasks["sonarqube"].dependsOn "jacocoTestReport"
 

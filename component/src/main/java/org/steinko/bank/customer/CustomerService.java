@@ -32,7 +32,7 @@ public interface CustomerService {
 	 Customer updateCustomer(Customer customer);
 	 
 	 /**
-	  * Get the list of customers in the system
+	  * Get the list of customers in the system.
 	  * @return customers
 	  */
 	 List<Customer> getCustomers();

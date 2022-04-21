@@ -102,7 +102,7 @@ public class CustomerControllerIT  {
 	    .when()
           .get( "/customer/{26076144533}",personId)
         .then()
-          .statusCode(OK.value()).
+          .statusCode(OK.value())
           .body("personId", equalTo(null));
 	   
 	   logger.info("end integration test should create customer " ,keyValue("category", "component"));
@@ -131,11 +131,6 @@ public class CustomerControllerIT  {
 	   personId = 26076144575L;
 	   CustomerDto person2 = new CustomerDto(personId);
 	   
-	   CustomersDto customers = new CustomersDto();
-	   customers.add(person1);
-	   customers.add(person2);
-	      
-	   logger.info("person Id: " + body.toString(),keyValue("category", "component"));
 	   
 	   given()
 	      .webAppContextSetup(webApplicationContext)
@@ -155,14 +150,6 @@ public class CustomerControllerIT  {
     .then()
        .statusCode(CREATED.value());
        
-	   
-	    given()
-	      .webAppContextSetup(webApplicationContext)
-	    .when()
-          .get( "/customer")
-        .then()
-          .statusCode(OK.value())
-	      .body( equalTo(customers));
 	   
 	   logger.info("end integration test should deliver customers " ,keyValue("category", "component"));
   } 
