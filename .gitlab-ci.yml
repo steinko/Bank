@@ -4,14 +4,25 @@ stages:
   - test
   
 build:
+  image: java:8
   stage: build
   script:
     - cd component 
     - ./gradlew assemble 
+
   
-test:
+test-backend:
+  image: java:8
   stage: test
   script:
     - cd component 
     - ./gradlew check
+ 
+test-frontend:
+  image: node
+  stage: test
+  script:
+    - cd frontend 
+    - npm i
+    - npm test
  
