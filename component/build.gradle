@@ -8,6 +8,11 @@ plugins{
 
 group = 'org.steinko'
 
+compileJava {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}
+
 sonarqube {
     properties {
     property "sonar.sourceEncoding", "UTF-8"
