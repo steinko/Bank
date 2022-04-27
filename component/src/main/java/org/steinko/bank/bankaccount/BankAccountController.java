@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
 
 /**
  * Bank account controller.
@@ -21,11 +21,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class BankAccountController {
 	
 	/**
-	 * Service.
+	 * Repository.
 	 */
-	@Autowired
-	private BankAccountService service;
+	private final BankAccountRepository repository;
 	
+	
+	/**
+	 * Create repository.
+	 * @param repository created repository.
+	 */
+	 BankAccountController(BankAccountRepository repository) {
+	    this.repository = repository;
+	 }
+	
+	  
 	/**
 	 * Get savings account data. 
 	 * @param personId
@@ -35,9 +44,30 @@ public class BankAccountController {
 	@GetMapping(value = "/savingsaccount/{personId}")
 	public BankAccountDto getSavingsAccount(
 			@PathVariable Long personId) {
-		BankAccount savingsaccount = 
-				service.getSavingsAccount(personId);
-		return convertToDto(savingsaccount);
+		       
+		    BankAccountDto  bankAccountDto = new BankAccountDto();
+		
+		    Optional<BankAccount> optionalSavingsAccount = 
+			repository.findById(personId);
+		        
+		    if (optionalSavingsAccount.isPresent()) {
+		        	
+		           BankAccount savingsAccount = 
+		           optionalSavingsAccount.get();
+		           bankAccountDto = convertToDto(savingsAccount);
+		                  
+		        } else {
+		        	
+		            bankAccountDto = new BankAccountDto();
+		            throw new BankAccountNotFoundExeption(
+		            new Throwable("Bank Account not found, personId: " 
+		                        + personId)
+		            );
+		                  
+		        }
+		        	
+		        
+		     return bankAccountDto;
 	}
 	
 	/**
@@ -51,11 +81,29 @@ public class BankAccountController {
 	public BankAccountDto depositToSavingsAccount(
 			@PathVariable Long personId, 
 			@PathVariable Integer amount) {
-		BankAccount savingsaccount = 
-				service.depositToSavingsAccount(
-						personId,
-						amount);
-		return convertToDto(savingsaccount);
+		
+		    BankAccountDto  bankAccountDto = new BankAccountDto();
+		
+		    Optional<BankAccount> optionalSavingsAccount = 
+				repository.findById(personId);
+		        
+		    if (optionalSavingsAccount.isPresent()) {
+		        	
+		          BankAccount savingsAccount = 
+		          optionalSavingsAccount.get();
+		          bankAccountDto = convertToDto(savingsAccount);
+		                  
+		     } else {
+		        	
+		          bankAccountDto = new BankAccountDto();
+		          throw new BankAccountNotFoundExeption(
+		             new Throwable("Bank Account not found, personId: " 
+		                   + personId)
+		          );
+		     }
+		        
+		     return bankAccountDto;
+		        
 	}
 	
 	/**

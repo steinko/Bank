@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import  static net.logstash.logback.argument.StructuredArguments.keyValue;
+
 import java.text.ParseException;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Customer Controller.
@@ -30,63 +31,64 @@ import java.util.ArrayList;
 public class CustomerController {
 	
 	/**
+	 * Repository.
+	 */
+	 private final CustomerRepository repository;
+	
+	/**
+	 * Create customer.
+	 * @param repository customer repository.
+	 */
+	 CustomerController(CustomerRepository repository) {
+	    this.repository = repository;
+	 }
+	
+	
+	/**
 	 * Logger.
 	 */
-	private static Logger logger = 
+	 private static Logger logger = 
 			LoggerFactory.getLogger(CustomerController.class);
 	
 	
-	/**
-	 * Customer service.
-	 */
-	private final CustomerService service;
 	
 	
 	/**
-	 * Constructor.
-	 * @param service
-	 */
-	public CustomerController(CustomerService service) {
-		this.service = service;	
-	}
-	
-	
-	/**
-	 * Create customer API.
+	 * Create customer.
 	 * @param customerDto customer data transfer object 
 	 * @return  customer data transfer object
 	 */
-	@ResponseStatus(HttpStatus.CREATED)
-	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public CustomerDto createCustomer(
+	 @ResponseStatus(HttpStatus.CREATED)
+	 @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	 public CustomerDto createCustomer(
 			 @RequestBody CustomerDto customerDto) {
 		
 		logger.info("start methode create customer  input customerDto" 
-	    + customerDto.toString(), keyValue("category", "component"));
+	    + customerDto.toString());
 		
 		 Customer customer = null;
 		 try {    
 		       customer = convertToEntity(customerDto);
 		       
 		     } catch (ParseException pe) {
-	        	logger.error(pe.toString(), 
-	        	  keyValue("category", "component"));
+	        	logger.error(pe.toString());
 	         }      
-        Customer customerCreated = service.createCustomer(customer);
+        Customer customerCreated = repository.save(customer);
         return convertToDto(customerCreated);
-	}
+	 }
 	
 	
 	/**
 	 * Get customers.
 	 * @return customers. 
 	 */
-	@ResponseStatus(HttpStatus.OK)
-	@GetMapping
-	public List<CustomerDto> getCustomers() {
-		List<Customer> customers = service.getCustomers();
+	 @ResponseStatus(HttpStatus.OK)
+	 @GetMapping
+	 public List<CustomerDto> getCustomers() {
+		Iterable<Customer> customers = repository.findAll();
+		
 		return convertToDto(customers);
-	}
+	 }
 	
 	
 	/**
@@ -94,23 +96,23 @@ public class CustomerController {
 	 * @param personId person id to get
 	 * @return Customer data. 
 	 */
-	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(value = "/{personId}")
-	public CustomerDto getCustomer(@PathVariable Long personId) {
-		Customer customer = service.getCustomer(personId);
+	 @ResponseStatus(HttpStatus.OK)
+	 @GetMapping(value = "/{personId}")
+	 public CustomerDto getCustomer(@PathVariable Long personId) {
+		Customer customer = repository.findByPersonId(personId);
 		return convertToDto(customer);
-	}
+	 }
 	
 	
 	/**
 	 * Delete the customer with the spesific person id.
 	 * @param personId person id to delete
 	 */
-	@DeleteMapping(value = "/{personId}")
-	@ResponseStatus(HttpStatus.OK)
-	public void deleteCustomer(@PathVariable Long personId) {
-		     service.deleteCustomer(personId);
-	}
+	 @DeleteMapping(value = "/{personId}")
+	 @ResponseStatus(HttpStatus.OK)
+	 public void deleteCustomer(@PathVariable Long personId) {
+		     repository.deleteByPersonId(personId);
+	 }
 	
 	
 	/**
@@ -118,22 +120,21 @@ public class CustomerController {
 	 * @param customerDto customer data transfer object.
 	 * @return customer data.
 	 */
-	@PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public CustomerDto updateCustomer(
+	 @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	 @ResponseStatus(HttpStatus.OK)
+	 public CustomerDto updateCustomer(
 			@RequestBody CustomerDto customerDto) {
 		
 		Customer customer = null;
 		try  {    
 		       customer = convertToEntity(customerDto);    
 		     } catch (ParseException pe) {
-	        	logger.error(pe.toString(), 
-	        		keyValue("category", "component"));
+	        	logger.error(pe.toString());
 	         }  
 		 Customer customerCreated = 
-				 service.updateCustomer(customer);
+				 repository.save(customer);
 	     return convertToDto(customerCreated);	
-	}
+	 }
 	
 	
 	/**
@@ -141,11 +142,11 @@ public class CustomerController {
 	 * @param customer the Customer object to convert
 	 * @return data transfer object with converted data
 	 */
-	public CustomerDto convertToDto(Customer customer) {
+	 public CustomerDto convertToDto(Customer customer) {
 		CustomerDto customerDto = 
 				new CustomerDto(customer.getPersonId());
 	    return customerDto;
-	}
+	 }
 	
 	
 	/**
@@ -153,14 +154,16 @@ public class CustomerController {
 	 * @param customers  customer objects that should be converted.
 	 * @return data transfer objects with converted data.
 	 */
-	public List<CustomerDto> convertToDto(List<Customer> customers) {
+	 public List<CustomerDto> convertToDto(Iterable<Customer> customers) {
+		 
 		List<CustomerDto> customersDto = new ArrayList<CustomerDto>();
-		for (Customer customer:customers) {
-			CustomerDto cutomerDto = convertToDto(customer);
+		Iterator<Customer> iterator = customers.iterator();
+		while (iterator.hasNext()) {
+			CustomerDto cutomerDto = convertToDto(iterator.next());
 			customersDto.add(cutomerDto);
 		}
 	    return customersDto;
-	}
+	 }
 	
 	
 	/**
@@ -169,29 +172,12 @@ public class CustomerController {
 	 * @return customer
 	 * @throws ParseException error in conversion
 	 */
-	public  Customer convertToEntity(CustomerDto customerDto) 
+	 public  Customer convertToEntity(CustomerDto customerDto) 
 			  throws ParseException {
 		
 		Customer customer = new Customer("", 
 				customerDto.getPersonId(), 0L, 0);
-		
-		//ModelMapper modelMapper = new ModelMapper();
-	//	Customer customer = null;
-	//	try {
-	//	       customer = modelMapper.map(customerDto, Customer.class);
-	  //   	} catch (IllegalArgumentException Iae )  {
-	    // 		 logger.error("IllegalArgument:"+ 
-		//     Iae.toString(),keyValue("category", "component"));
-	     //		
-	     //	} catch (ConfigurationException ce) {
-	    // 		logger.error("Configuration error:" 
-		//  + ce.toString(),keyValue("category", "component"));
-	     		
-	     //	} catch (MappingException me) { 
-		//        logger.error("Mapping error:"+  me.toString(), 
-		//    keyValue("category", "component"));
-	     //	}
 	    return customer;
-	}
+	 }
 	
 }

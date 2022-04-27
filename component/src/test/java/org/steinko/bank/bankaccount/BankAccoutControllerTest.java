@@ -18,7 +18,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import  static net.logstash.logback.argument.StructuredArguments.keyValue;
 
 import static org.mockito.Mockito.when;
 
@@ -32,6 +31,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.Matchers.equalTo;
 
+import java.util.Optional;
+
 
 
 @ExtendWith(MockitoExtension.class)
@@ -42,7 +43,7 @@ public class BankAccoutControllerTest {
 	BankAccountController controller;
 	
 	@Mock
-	BankAccountService service;
+	BankAccountRepository repository;
 	
 	
 	
@@ -51,7 +52,8 @@ public class BankAccoutControllerTest {
 		  Long personId = 26076144574L;
 		  Integer amount = 400;
 		  BankAccount savingAccount = new BankAccount(amount);
-		  when(service.getSavingsAccount(personId)).thenReturn(savingAccount);
+		  Optional<BankAccount> optionalSavingAccount = Optional.of(savingAccount);
+		  when(repository.findById(personId)).thenReturn(optionalSavingAccount);
 		 
 		  given()
 	        .standaloneSetup(controller)
@@ -68,8 +70,8 @@ public class BankAccoutControllerTest {
 		  Long personId = 26076144574L;
 		  Integer amount = 400;
 		  BankAccount savingAccount = new BankAccount(700);
-		 
-		  when(service.depositToSavingsAccount(personId,amount)).thenReturn(savingAccount);
+		  Optional<BankAccount> optionalSavingAccount = Optional.of(savingAccount);
+		  when( repository.findById(personId)).thenReturn(optionalSavingAccount);
 		 
 		  given()
 	        .standaloneSetup(controller)

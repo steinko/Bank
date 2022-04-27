@@ -26,9 +26,7 @@ import org.json.JSONException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import  static net.logstash.logback.argument.StructuredArguments.keyValue;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.reset;
@@ -67,7 +65,7 @@ public class CustomerControllerTest {
 	
 	
 	@Mock
-	private CustomerService service;
+	private CustomerRepository repository;
 	
 	
 	@InjectMocks
@@ -84,15 +82,15 @@ public class CustomerControllerTest {
 	@Test
 	  public void shouldCreateCustomer() throws JSONException {
 		
-		logger.info("start unit test should create customer " ,keyValue("category", "component"));
+		logger.info("start unit test should create customer " );
 		Long personId = 26076144575L;
 		Customer customer = new Customer("",personId,0L,0 );
 		CustomerDto body = new CustomerDto(personId);
 	   
 	    
-	    logger.info("CustomerDto.toString " + body.toString() ,keyValue("category", "component"));
+	    logger.info("CustomerDto.toString " + body.toString() );
 	    
-	    given(service.createCustomer(any(Customer.class))).willReturn(customer);
+	    given(repository.save(any(Customer.class))).willReturn(customer);
 	    
 	    String url = "/customer";
 	    
@@ -106,7 +104,7 @@ public class CustomerControllerTest {
 	           .contentType("application/json")
 	           .statusCode(CREATED.value())
 	           .body("personId",equalTo(personId));
-	    logger.info("end unit test should create customer " ,keyValue("category", "component"));
+	    logger.info("end unit test should create customer " );
 	  }
 	
 	@Disabled
@@ -125,7 +123,7 @@ public class CustomerControllerTest {
 		   //String result = new ObjectMapper().writeValueAsString(customersDto);
 		   String result = "";
 		   
-		   given(service.getCustomers()).willReturn(customers);
+		   given(repository.findAll()).willReturn(customers);
 		   
 		   given()
 		   .when()
@@ -139,7 +137,7 @@ public class CustomerControllerTest {
 	  void shoulGetCustomerDetails() throws JSONException {
 		   Long personId = 26076144574L;
 		   Customer customer = new Customer("",personId,0L,0 );
-		   given(service.getCustomer(personId)).willReturn(customer);
+		   given(repository.findByPersonId(personId)).willReturn(customer);
 		   
 		   given()
 		   .when()
@@ -168,7 +166,7 @@ public class CustomerControllerTest {
 		   CustomerDto body =  new  CustomerDto(personId);
 	       
 	       Customer customer = new Customer("",personId,0L,0 );
-		   given(service.updateCustomer(any(Customer.class))).willReturn(customer);
+		   given(repository.save(any(Customer.class))).willReturn(customer);
 	    
 		   given()
 		      .contentType("application/json")

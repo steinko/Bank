@@ -1,18 +1,19 @@
 package org.steinko.bank.bankaccount;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 /**
 *  Mananage storage of bank account.
 */
-@Repository
+
 public interface BankAccountRepository
   extends JpaRepository<BankAccount, Long> {
 	/**
 	 * Get Customer by the persons id. 
-	 * @param personId
+	 * @param id identifies the bank account.
 	 * @return bank account
 	 */
-	BankAccount getByPersonId(Long personId);
+	Optional<BankAccount> findById(Long id);
 }

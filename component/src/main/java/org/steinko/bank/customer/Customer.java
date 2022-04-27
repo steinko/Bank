@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.steinko.bank.bankaccount.BankAccount;
 
-import  static net.logstash.logback.argument.StructuredArguments.keyValue;
 
 /**
  * Customer.
@@ -83,8 +82,7 @@ public class Customer {
 	public Customer(String aName, 
 			Long aPersonId, Long aCustomerNumber, int aPin) {
 	   logger.info("start constructor create customer . persoonId:" 
-			+ aPersonId.toString(), 
-			keyValue("category", "component"));
+			+ aPersonId.toString());
 	   this.customerNumber = aCustomerNumber;
 	   this.name = aName;
 	   this.personId = aPersonId; 
@@ -155,7 +153,7 @@ public class Customer {
 	@Override
 	public String toString() {
 		 logger.info("toString  persoonId:" 
-	   + personId.toString(), keyValue("category", "component"));
+	   + personId.toString());
 		return "personId:" + personId.toString();
 	}
 }

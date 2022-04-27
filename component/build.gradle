@@ -1,10 +1,15 @@
+
 plugins{
-  id 'java'
   id 'checkstyle' 
   id 'jacoco'
   id "org.sonarqube" version "2.8"
-  id "org.springframework.boot" version "2.3.0.RELEASE"
+  id 'org.springframework.boot' version '2.6.7'
+  id 'com.softeq.gradle.itest' version '1.0.4'
 }
+
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+
 
 group = 'org.steinko'
 
@@ -15,12 +20,12 @@ compileJava {
 
 sonarqube {
     properties {
-    property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.sourceEncoding", "UTF-8"
 		property "sonar.host.url", "https://sonarcloud.io"
 		property "sonar.login", "43983a01ea79d77e7ce4931e989733cdcfb6ef47"
 		property "sonar.projectKey", "Bank"
 		property "sonar.organization", "steinko-github"
-    property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
 		property "sonar.java.source", "13"
     }
   }
@@ -29,53 +34,36 @@ repositories {
 	mavenCentral()
 }
 
-sourceSets {
-    intTest {
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
-    }
-}
-
-configurations {
-        intTestImplementation.extendsFrom implementation
+integrationTest {
+    useJUnitPlatform()
 }
 
 dependencies {
 
-	implementation 'org.springframework.boot:spring-boot-starter-web:2.2.7.RELEASE'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.2.7.RELEASE'
+	implementation('org.springframework.boot:spring-boot-starter-web')
+	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+	
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
-    implementation 'net.logstash.logback:logstash-logback-encoder:6.3'
     implementation 'org.modelmapper:modelmapper:2.3.7'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2.2'
-    implementation 'org.springframework.cloud:spring-cloud-gcp-starters:1.2.8.RELEASE'
-
-
-
-	runtimeOnly 'com.h2database:h2:1.4.200'
-
+  
+	
+    implementation 'org.postgresql:postgresql:42.3.4'
+    implementation 'com.h2database:h2:2.1.212'
+    
+    
 	testImplementation 'io.rest-assured:spring-mock-mvc:4.3.0'
-	testImplementation('org.springframework.boot:spring-boot-starter-test:2.2.7.RELEASE') 
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.6'
+    testImplementation 'com.tngtech.archunit:archunit-junit5:0.14.1'
+    testImplementation 'com.h2database:h2:2.1.212'
 	
-    testImplementation 'org.jboss.arquillian:arquillian-bom:1.7.0.Alpha10'
-	testImplementation 'org.jboss.arquillian.junit:arquillian-junit-container:1.7.0.Alpha1'
-	testImplementation 'org.arquillian.cube:arquillian-cube-docker:1.18.2'
-    testImplementation 'org.arquillian.cube:assertj-docker-java:1.18.2'
-    testImplementation 'org.assertj:assertj-core:3.16.1'
-
-
-	intTestImplementation 'io.rest-assured:spring-mock-mvc:4.3.0'
-	intTestImplementation('org.springframework.boot:spring-boot-starter-test:2.2.7.RELEASE') 
-
-	
-    intTestImplementation 'org.jboss.arquillian:arquillian-bom:1.7.0.Alpha10'
-	intTestImplementation 'org.jboss.arquillian.junit:arquillian-junit-container:1.7.0.Alpha1'
-	intTestImplementation 'org.arquillian.cube:arquillian-cube-docker:1.18.2'
-    intTestImplementation 'org.arquillian.cube:assertj-docker-java:1.18.2'
-    intTestImplementation 'org.assertj:assertj-core:3.16.1'
-    intTestImplementation 'com.tngtech.archunit:archunit-junit5:0.14.1'
+	itestImplementation 'io.rest-assured:spring-mock-mvc:4.3.0'
+    itestImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.6'
+    itestImplementation 'com.tngtech.archunit:archunit-junit5:0.14.1'
+    itestImplementation 'com.h2database:h2:2.1.212'
 }
+
 	 
 test {
 	useJUnitPlatform()
@@ -85,20 +73,17 @@ task myJavadocs(type: Javadoc) {
   source = sourceSets.main.allJava
 }
 
+jacoco {
+    toolVersion = "0.8.6"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
 jacocoTestReport {
     reports {
         xml.enabled true
     }
 }
 
-task integrationTest(type: Test) {
-    description = 'Runs integration tests.'
-    group = 'verification'
-
-    testClassesDirs = sourceSets.intTest.output.classesDirs
-    classpath = sourceSets.intTest.runtimeClasspath
-    shouldRunAfter test
-}
 
 check.dependsOn integrationTest
 
@@ -110,4 +95,3 @@ test.finalizedBy jacocoTestReport
 integrationTest.finalizedBy jacocoTestReport
 
 checkstyleTest.enabled = false
-checkstyleIntTest.enabled = false

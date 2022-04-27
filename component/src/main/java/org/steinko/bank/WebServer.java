@@ -18,6 +18,7 @@ public class WebServer {
 	private static Logger logger = 
 			LogManager.getLogger(WebServer.class);
 	
+	
    /**
     * Stating the component.
     * @param args arguments
