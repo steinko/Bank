@@ -55,5 +55,6 @@ backend-acceptrance-test:
      BACKEND_URL: value_from_deploy_job
    script:
      - cd acceptancetest
+     - export BACKEND_URL=$BACKEND_URL
      - ./gradlew cucumber
      
