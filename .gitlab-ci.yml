@@ -53,7 +53,9 @@ backend-acceptrance-test:
    image: java:8
    script:
      - cd acceptancetest
-     - echo $BACKEND_URL
+     - echo "$BACKEND_URL"
+     - export BACKEND_URL="$BACKEND_URL"
+     - echo $BACKEN_URL
      - ./gradlew cucumber
    dependencies:
       - deploy-backend
