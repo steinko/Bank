@@ -12,14 +12,37 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.json.simple.JSONObject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class SettInnSteps {
 	
+	
+	/**
+	 * person id.
+	 */
 	private Long personId;
 	
+	/**
+	 * Backen url.
+	 */
+	private String backendUrl;
+	
+	/**
+	 * Logger.
+	 */
+	 private static Logger logger = 
+			LoggerFactory.getLogger(SettInnSteps.class);
+	
+   
+	
 	@Given("Jer person med person id {string}")
-	public void jer_person_med_person_id(String personId) { 
-		
+	public void jer_person_med_person_id(String personId) throws Exception { 
+		   
+		   this.backendUrl = System.getenv("BACKEND_URL");
+		   logger.info("Backend url: " + this.backendUrl);
+    	   if (backendUrl==null) throw new Exception("No envioment variable");
 		
 		   long lpersonId=Long.parseLong(personId);  
 		   this.personId = lpersonId;
@@ -27,12 +50,14 @@ public class SettInnSteps {
 		   JSONObject person = new JSONObject();
 		   person.put("personId",this.personId);
 		   String body = person.toJSONString();
+		   String createCustomerUrl = this.backendUrl + "/customer";
+		   logger.info("Create customer url: " + createCustomerUrl);
 		 
 		   given().
 		      contentType("application/json").
 		      body(body). 
 		   when().
-	          post("http://localhost:9001/customer").  
+	          post(createCustomerUrl).  
 	       then().
 	          statusCode(201);
 		   
@@ -51,14 +76,14 @@ public class SettInnSteps {
 		  pathParam("personId", this.personId). 
 		  pathParam("amount", amount). 
 	    when().
-          put("http://localhost:9001/savingsaccount/{personId}/{amount}").  
+          put(this.backendUrl + "/savingsaccount/{personId}/{amount}").  
         then().
           statusCode(200); 
 		
 		given().
 		  pathParam("personId", this.personId). 
 	    when().
-           get("http://localhost:9001/savingsaccount/{personId}").  
+           get(this.backendUrl + "/savingsaccount/{personId}").  
         then().
            statusCode(200).
            body("balance",equalTo(balance));
@@ -72,7 +97,7 @@ public class SettInnSteps {
 		  pathParam("personId", this.personId). 
 		  pathParam("amount", amount).
 	    when().
-          put("http://localhost:9001/savingsaccount/{personId}/{amount}").  
+          put(this.backendUrl + "/savingsaccount/{personId}/{amount}").  
         then().
           statusCode(200);  
 	}
@@ -84,7 +109,7 @@ public class SettInnSteps {
 		given().
 		  pathParam("personId", this.personId). 
 	    when().
-          get("http://localhost:9001/savingsaccount/{personId}").  
+          get( this.backendUrl + "/savingsaccount/{personId}").  
         then().
           statusCode(200).
           body("balance",equalTo(balance));

@@ -1,6 +1,7 @@
 frontend/node_modules
 component/build
+component/.gradle
 .proect
 .gradle
 acceptancetest/build
-acceptancetest/gradle
+acceptancetest/.gradle

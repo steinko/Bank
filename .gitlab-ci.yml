@@ -1,7 +1,10 @@
 image: java:8
 stages:
   - build
-  - test
+  - integration-test
+  - deploy
+  - acceptance-test
+  - destroy
   
 build:
   image: java:8
@@ -25,3 +28,28 @@ test-frontend:
     - npm i
     - npm test
  
+deploy-backend:
+  stage: deploy
+  image: pulumi/pulumi-nodejs
+  script:
+    - cd database
+    - cd deploy
+    - npm i
+    - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
+    - pulumi up -y
+    - echo "spring.datasource.url=jdbc:postgresql://$(pulumi stack output  endpoint )/mydb" >> ../../component/src/main/resources/staging.application.properites
+    - echo "BACKEND_URL=$(pulumi stack output  endpoint )" >> staging.env
+    - cd ../..
+  artifacts:
+    reports:
+      dotenv: build.env
+
+backend-acceptrance-test:
+   stage: acceptance-test
+   image: java:8
+   variables:
+     BACKEND_URL: value_from_deploy_job
+   script:
+     - cd acceptancetest
+     - ./gradlew cucumber
+     
