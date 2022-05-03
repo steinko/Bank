@@ -15,14 +15,14 @@ build:
 
 test-backend:
   image: java:8
-  stage: test
+  stage: integration-test
   script:
     - cd component 
     - ./gradlew check -PdisableIntegrationTests
  
 test-frontend:
   image: node
-  stage: test
+  stage: integration-test
   script:
     - cd frontend 
     - npm i
