@@ -91,6 +91,6 @@ destroy-backend:
     - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
     - pulumi login
     - pulumi stack select dev
-    - pulumi destroy-y
+    - pulumi destroy -y
     - cd ../..
      
