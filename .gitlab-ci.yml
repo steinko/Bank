@@ -36,6 +36,9 @@ deploy-backend:
     - cd deployment
     - npm i
     - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
+    - pulumi login
+    - pulumi stack select dev
+
     - pulumi up -y
     - pulumi stack select dev
     - echo "spring.datasource.url=jdbc:postgresql://$(pulumi stack output  endpoint )/mydb" >> ../../component/src/main/resources/staging.application.properites
