@@ -38,15 +38,23 @@ deploy-backend:
     - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
     - pulumi login
     - pulumi stack select dev
-
     - pulumi up -y
     - pulumi stack select dev
     - echo "spring.datasource.url=jdbc:postgresql://$(pulumi stack output  endpoint )/mydb" >> ../../component/src/main/resources/staging.application.properites
-    - echo "BACKEND_URL=$(pulumi stack output  endpoint )" >> staging.env
+    - cd ../..  
+    - cd component 
+    - cd deployment
+    - npm i
+    - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
+    - pulumi login
+    - pulumi stack select dev
+    - pulumi up -y
+    - echo "BACKEND_URL=$(pulumi stack output  url )" >> deploy.env
     - cd ../..
+
   artifacts:
     reports:
-      dotenv: staging.env
+      dotenv: deploy.env
 
 backend-acceptrance-test:
    stage: acceptance-test
@@ -59,4 +67,25 @@ backend-acceptrance-test:
      - ./gradlew cucumber
    dependencies:
       - deploy-backend
+
+destroy-backend:
+  stage: destroy
+  image: pulumi/pulumi-nodejs
+  script:
+    - cd database
+    - cd deployment
+    - npm i
+    - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
+    - pulumi login
+    - pulumi stack select dev
+    - pulumi destroy -y
+    - cd ../..  
+    - cd component 
+    - cd deployment
+    - npm i
+    - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
+    - pulumi login
+    - pulumi stack select dev
+    - pulumi destroy-y
+    - cd ../..
      
