@@ -1,5 +1,9 @@
 package org.steinko.bank.bankaccount;
 
+import org.steinko.bank.customer.Customer;
+import org.steinko.bank.customer.CustomerController;
+import org.steinko.bank.customer.CustomerRepository;
+
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
@@ -21,17 +28,29 @@ import java.util.Optional;
 public class BankAccountController {
 	
 	/**
-	 * Repository.
+	 * Logger.
 	 */
-	private final BankAccountRepository repository;
+	 private static Logger logger = 
+			LoggerFactory.getLogger(BankAccountController.class);
 	
+	
+	/**
+	 * Customer Repository.
+	 */
+	private final CustomerRepository customerRepository;
+	
+	/**
+	 * Bank Account Repository.
+	 */
+	private final BankAccountRepository bankAccountRepository;
 	
 	/**
 	 * Create repository.
 	 * @param repository created repository.
 	 */
-	 BankAccountController(BankAccountRepository repository) {
-	    this.repository = repository;
+	 BankAccountController(CustomerRepository customerRepository , BankAccountRepository bankAccountRepository) {
+	    this.customerRepository = customerRepository;
+	    this.bankAccountRepository = bankAccountRepository;
 	 }
 	
 	  
@@ -47,13 +66,15 @@ public class BankAccountController {
 		       
 		    BankAccountDto  bankAccountDto = new BankAccountDto();
 		
-		    Optional<BankAccount> optionalSavingsAccount = 
-			repository.findById(personId);
+		    Customer customer = 
+			customerRepository.findByPersonId(personId);
 		        
-		    if (optionalSavingsAccount.isPresent()) {
-		        	
-		           BankAccount savingsAccount = 
-		           optionalSavingsAccount.get();
+		    if (customer != null) {
+		    
+		           BankAccount savingsAccount = customer.savingAccount();
+		           Integer balance =  savingsAccount.getBalance();
+		           logger.info("Bank account savings account balance in get savings account" 
+		        		    + balance.toString());
 		           bankAccountDto = convertToDto(savingsAccount);
 		                  
 		        } else {
@@ -84,13 +105,25 @@ public class BankAccountController {
 		
 		    BankAccountDto  bankAccountDto = new BankAccountDto();
 		
-		    Optional<BankAccount> optionalSavingsAccount = 
-				repository.findById(personId);
+		    Customer customer = 
+					customerRepository.findByPersonId(personId);
 		        
-		    if (optionalSavingsAccount.isPresent()) {
+		    if (customer != null) {
 		        	
 		          BankAccount savingsAccount = 
-		          optionalSavingsAccount.get();
+		        		 customer.savingAccount();
+		          savingsAccount.gi(amount);
+		          Integer balance =  savingsAccount.getBalance();
+		          logger.info("Bank account savings account balance "
+		          		+ "before save in despoint to savings account" 
+		        		+ balance.toString());
+		           bankAccountRepository.save(savingsAccount);
+		           customer = customerRepository.findByPersonId(personId);
+		           savingsAccount = customer.savingAccount();
+		           balance =  savingsAccount.getBalance();
+		           logger.info("Bank account savings account balance after save" 
+		        		    + balance.toString());
+		         
 		          bankAccountDto = convertToDto(savingsAccount);
 		                  
 		     } else {

@@ -10,7 +10,6 @@ build:
     - cd component 
     - ./gradlew assemble 
 
-  
 test-backend:
   image: java:8
   stage: test

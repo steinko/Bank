@@ -14,8 +14,8 @@ apply plugin: 'io.spring.dependency-management'
 group = 'org.steinko'
 
 compileJava {
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
 }
 
 sonarqube {
@@ -47,6 +47,7 @@ dependencies {
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
     implementation 'org.modelmapper:modelmapper:2.3.7'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2.2'
+    implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot2:1.8'
   
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'com.h2database:h2'
@@ -83,9 +84,9 @@ jacocoTestReport {
 }
 
 
-check.dependsOn integrationTest
+//check.dependsOn integrationTest
 
-bootRun.dependsOn build
+//bootRun.dependsOn build
 
 project.tasks["sonarqube"].dependsOn "jacocoTestReport"
 
