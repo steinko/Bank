@@ -55,6 +55,6 @@ backend-acceptrance-test:
      - cd acceptancetest
      - echo $BACKEND_URL
      - ./gradlew cucumber
-    dependencies:
+   dependencies:
       - deploy-backend
      
