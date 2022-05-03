@@ -1,7 +1,6 @@
 package org.steinko.bank.bankaccount;
 
 import org.steinko.bank.customer.Customer;
-import org.steinko.bank.customer.CustomerController;
 import org.steinko.bank.customer.CustomerRepository;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
 
 /**
  * Bank account controller.
@@ -45,10 +43,12 @@ public class BankAccountController {
 	private final BankAccountRepository bankAccountRepository;
 	
 	/**
-	 * Create repository.
-	 * @param repository created repository.
+	 * Create repositories.
+	 * @param customerRepository created customer repository.
+	 * @param bankAccountRepository created bank account repository.
 	 */
-	 BankAccountController(CustomerRepository customerRepository , BankAccountRepository bankAccountRepository) {
+	 BankAccountController(CustomerRepository customerRepository, 
+			 BankAccountRepository bankAccountRepository) {
 	    this.customerRepository = customerRepository;
 	    this.bankAccountRepository = bankAccountRepository;
 	 }
@@ -65,16 +65,17 @@ public class BankAccountController {
 			@PathVariable Long personId) {
 		       
 		    BankAccountDto  bankAccountDto = new BankAccountDto();
-		
 		    Customer customer = 
 			customerRepository.findByPersonId(personId);
 		        
 		    if (customer != null) {
 		    
-		           BankAccount savingsAccount = customer.savingAccount();
+		           BankAccount savingsAccount = 
+		        		   customer.savingAccount();
 		           Integer balance =  savingsAccount.getBalance();
-		           logger.info("Bank account savings account balance in get savings account" 
-		        		    + balance.toString());
+		           logger.info("Bank account savings balance "
+		           		+ "in get savings account" 
+		        		+ balance.toString());
 		           bankAccountDto = convertToDto(savingsAccount);
 		                  
 		        } else {
@@ -106,25 +107,26 @@ public class BankAccountController {
 		    BankAccountDto  bankAccountDto = new BankAccountDto();
 		
 		    Customer customer = 
-					customerRepository.findByPersonId(personId);
+			   customerRepository.findByPersonId(personId);
 		        
 		    if (customer != null) {
 		        	
-		          BankAccount savingsAccount = 
+		        BankAccount savingsAccount = 
 		        		 customer.savingAccount();
-		          savingsAccount.gi(amount);
-		          Integer balance =  savingsAccount.getBalance();
-		          logger.info("Bank account savings account balance "
-		          		+ "before save in despoint to savings account" 
-		        		+ balance.toString());
-		           bankAccountRepository.save(savingsAccount);
-		           customer = customerRepository.findByPersonId(personId);
-		           savingsAccount = customer.savingAccount();
-		           balance =  savingsAccount.getBalance();
-		           logger.info("Bank account savings account balance after save" 
-		        		    + balance.toString());
+		        savingsAccount.gi(amount);
+		        Integer balance =  savingsAccount.getBalance();
+		        logger.info("Bank account savings account balance"
+		          + "before save in despoint to savings account" 
+		          + balance.toString());
+		        bankAccountRepository.save(savingsAccount);
+		        customer = customerRepository.findByPersonId(personId);
+		        savingsAccount = customer.savingAccount();
+		        balance =  savingsAccount.getBalance();
+		        logger.info("Bank account savings "
+		           + "account balance after save" 
+		           + balance.toString());
 		         
-		          bankAccountDto = convertToDto(savingsAccount);
+		        bankAccountDto = convertToDto(savingsAccount);
 		                  
 		     } else {
 		        	

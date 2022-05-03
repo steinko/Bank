@@ -1,7 +1,8 @@
 package org.steinko.bank.bankaccount;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
-
+import org.steinko.bank.customer.Customer;
+import org.steinko.bank.customer.CustomerRepository;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -43,43 +44,52 @@ public class BankAccoutControllerTest {
 	BankAccountController controller;
 	
 	@Mock
-	BankAccountRepository repository;
+	BankAccount savingsAccount;
+	
+	@Mock
+	CustomerRepository customerRepository;
+	
+	@Mock
+	BankAccountRepository bankAccountRepository;
 	
 	
 	
 	@Test
 	void getSavingBankAccount() {
+		
 		  Long personId = 26076144574L;
 		  Integer amount = 400;
-		  BankAccount savingAccount = new BankAccount(amount);
-		  Optional<BankAccount> optionalSavingAccount = Optional.of(savingAccount);
-		  when(repository.findById(personId)).thenReturn(optionalSavingAccount);
+		  Customer customer = new Customer("",1l,personId,0);
 		 
+		  
+		  when(customerRepository.findByPersonId(personId)).thenReturn(customer);
+		  
 		  given()
 	        .standaloneSetup(controller)
 	      .when()
             .get("/savingsaccount/{personId}", personId)
           .then()
              .statusCode(OK.value())
-             .body("balance",equalTo(amount)); 
+             .body("balance",equalTo(0)); 
 	}
 	
 	
 	@Test
 	void depositToSavingsBankAccount() {
+		
 		  Long personId = 26076144574L;
 		  Integer amount = 400;
-		  BankAccount savingAccount = new BankAccount(700);
-		  Optional<BankAccount> optionalSavingAccount = Optional.of(savingAccount);
-		  when( repository.findById(personId)).thenReturn(optionalSavingAccount);
-		 
+		  Customer customer = new Customer("",1l,personId,0);
+		  
+		  when( customerRepository.findByPersonId(personId)).thenReturn(customer);
+		  
 		  given()
 	        .standaloneSetup(controller)
 	      .when()
             .put("/savingsaccount/{personId}/{amount}", personId, amount)
           .then()
             .statusCode(OK.value())
-            .body("balance",equalTo(700)); 
+            .body("balance",equalTo(amount)); 
 	}
 	
 

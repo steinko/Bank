@@ -8,14 +8,14 @@ build:
   stage: build
   script:
     - cd component 
-    - ./gradlew assemble 
+    - ./gradlew clean assemble -PdisableIntegrationTests
 
 test-backend:
   image: java:8
   stage: test
   script:
     - cd component 
-    - ./gradlew check
+    - ./gradlew check -PdisableIntegrationTests
  
 test-frontend:
   image: node
