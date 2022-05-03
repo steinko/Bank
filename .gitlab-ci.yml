@@ -12,6 +12,9 @@ build:
   script:
     - cd component 
     - ./gradlew clean assemble -PdisableIntegrationTests
+  artifacts:
+    paths:
+      - component/build/libs/component.jar
 
 test-backend:
   image: java:8
@@ -51,10 +54,12 @@ deploy-backend:
     - pulumi up -y
     - echo "BACKEND_URL=$(pulumi stack output  url )" >> deploy.env
     - cd ../..
-
+  dependencies:
+      - build
   artifacts:
-    reports:
-      dotenv: deploy.env
+    paths:
+      - ./component/src/main/resources/staging.application.properites
+      - ./component/deployment/deploy.env
 
 backend-acceptrance-test:
    stage: acceptance-test
