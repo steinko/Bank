@@ -33,7 +33,7 @@ deploy-backend:
   image: pulumi/pulumi-nodejs
   script:
     - cd database
-    - cd deploy
+    - cd deployment
     - npm i
     - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
     - pulumi up -y
