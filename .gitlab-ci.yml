@@ -51,10 +51,10 @@ deploy-backend:
 backend-acceptrance-test:
    stage: acceptance-test
    image: java:8
-   variables:
-     BACKEND_URL: value_from_deploy_job
    script:
      - cd acceptancetest
-     - export BACKEND_URL=$BACKEND_URL
+     - echo $BACKEND_URL
      - ./gradlew cucumber
+    dependencies:
+      - deploy-backend
      
