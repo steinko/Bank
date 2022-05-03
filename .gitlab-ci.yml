@@ -52,7 +52,7 @@ deploy-backend:
     - pulumi login
     - pulumi stack select dev
     - pulumi up -y
-    - echo "BACKEND_URL=$(pulumi stack output  url )" >> deploy.env
+    - echo "BACKEND_URL=$(pulumi stack output  url )" >> ../../acceptancetest/deploy.env
     - cd ../..
   dependencies:
       - build
@@ -67,7 +67,7 @@ backend-acceptrance-test:
    script:
      - cd acceptancetest
      - echo "$BACKEND_URL"
-     - export BACKEND_URL="$BACKEND_URL"
+     - export << deploy.env
      - echo $BACKEN_URL
      - ./gradlew cucumber
    dependencies:
