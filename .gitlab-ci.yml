@@ -42,7 +42,7 @@ deploy-backend:
     - cd ../..
   artifacts:
     reports:
-      dotenv: build.env
+      dotenv: staging.env
 
 backend-acceptrance-test:
    stage: acceptance-test
