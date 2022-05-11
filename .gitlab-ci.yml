@@ -31,7 +31,7 @@ build-frontend:
     - npm run build-server
     - cd server-build
     - zip index.zip index.js
-    - ..
+    - cd ..
   artifacts:
     paths:
       - frontend/server-build/index.zip
