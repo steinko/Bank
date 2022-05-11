@@ -18,7 +18,7 @@ build-backend:
       - component/build/libs/component.jar
 
 build-frontend:
-  image: node
+  image: node:lts
   stage: build
   before_script:
     - rm -rf /var/lib/apt/lists/*
@@ -44,7 +44,7 @@ test-backend:
     - ./gradlew check -PdisableIntegrationTests
  
 test-frontend:
-  image: node
+  image: node:lts
   stage: integration-test
   script:
     - cd frontend 
