@@ -21,7 +21,10 @@ build-frontend:
   image: node
   stage: build
   before_script:
-    - apt-get install -y p7zip
+    - sudo rm -rf /var/lib/apt/lists/*
+    - sudo apt-get update
+    - sudo apt-cache gencaches
+    - sudo apt-get install -y zip unzip
   script:
     - cd frontend
     - npm i
