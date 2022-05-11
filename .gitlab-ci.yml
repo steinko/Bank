@@ -65,13 +65,13 @@ deploy-frontend:
     - pulumi stack select dev
     - pulumi up -y
     - pulumi stack select dev
-    - $FRONTENDURL=$(pulumi stack output  url) 
+    - FRONTENDURL=$(pulumi stack output  url)
     - cd ../..  
   dependencies:
       - build-frontend
   environment:
     name: staging
-    url: $FRONTENDURL
+    url: $FRONTENDUR
   
 
  
