@@ -25,6 +25,7 @@ build-frontend:
     - npm i
     - npm run build-server
     - cd server-build
+    - apt install zip
     - zip index.zip index.js
     - ..
   artifacts:
