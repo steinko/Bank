@@ -22,6 +22,7 @@ build-frontend:
   stage: build
   script:
     - cd frontend
+    - npx webpack-cli init
     - npm run build-server
     - cd server-build
     - zip index.zip index.js
