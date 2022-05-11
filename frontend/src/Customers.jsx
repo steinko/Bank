@@ -1,6 +1,8 @@
 import React from 'react';
 import {Component} from 'react';
 import  {getCustomers} from './CustomersService'
+import regeneratorRuntime from "regenerator-runtime";
+
 export default class Customers extends Component {
 	
 

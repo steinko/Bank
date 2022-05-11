@@ -6,15 +6,29 @@ stages:
   - acceptance-test
   - destroy
   
-build:
+build-backend:
   image: java:8
   stage: build
   script:
     - cd component 
     - ./gradlew clean assemble -PdisableIntegrationTests
+    - cd ..
   artifacts:
     paths:
       - component/build/libs/component.jar
+
+build-frontend:
+  image: node
+  stage: build
+  script:
+    - cd frontend
+    - npm run build-server
+    - cd server-build
+    - zip index.zip index.js
+    - ..
+  artifacts:
+    paths:
+      - frontend/server-build/index.zip
 
 test-backend:
   image: java:8
@@ -30,6 +44,30 @@ test-frontend:
     - cd frontend 
     - npm i
     - npm test
+
+deploy-frontend:
+  stage: deploy
+  image: pulumi/pulumi-nodejs
+  variables: 
+    FRONTENDURL: " "
+  script:
+    - cd frontend
+    - cd deployment
+    - npm i
+    - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
+    - pulumi login
+    - pulumi stack select dev
+    - pulumi up -y
+    - pulumi stack select dev
+    - $FRONTENDURL=$(pulumi stack output  url) 
+    - cd ../..  
+  dependencies:
+      - build-frontend
+  environment:
+    name: staging
+    url: $FRONTENDURL
+  
+
  
 deploy-backend:
   stage: deploy
@@ -55,7 +93,7 @@ deploy-backend:
     - echo "BACKEND_URL=$(pulumi stack output  url )" >> ../../acceptancetest/deploy.env
     - cd ../..
   dependencies:
-      - build
+      - build-backend
   artifacts:
     paths:
       - ./component/src/main/resources/staging.application.properites
@@ -93,4 +131,18 @@ destroy-backend:
     - pulumi stack select dev
     - pulumi destroy -y
     - cd ../..
+
+destroy-frontend:
+  stage: destroy
+  image: pulumi/pulumi-nodejs
+  script:
+    - cd frontend
+    - cd deployment
+    - npm i
+    - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
+    - pulumi login
+    - pulumi stack select dev
+    - pulumi destroy -y
+    - cd ../.. 
+     
      
