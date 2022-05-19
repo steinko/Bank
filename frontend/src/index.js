@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import App from './app/App';
+import * as serviceWorker from './serviceWorker'
+const { worker } = require('./mocks/browser')
 
+worker.start()
 ReactDOM.render(
   <React.StrictMode>
     <App />

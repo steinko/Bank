@@ -66,14 +66,17 @@ deploy-frontend:
     - pulumi up -y
     - pulumi stack select dev
     - FRONTENDURL=$(pulumi stack output  url)
+    - echo "CYPRESS_BASE_URL=$(pulumi stack output  url )" >> ../acceptanceTest/cypress.json
     - cd ../..  
   dependencies:
       - build-frontend
   environment:
     name: staging
     url: $FRONTENDUR
-  
-
+  artifacts:
+    paths:
+      - ./acceptance/cypress.json
+    
  
 deploy-backend:
   stage: deploy

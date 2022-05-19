@@ -1,5 +1,7 @@
 frontend/node_modules
 frontend/package-lock.json
+frontend/build
+frontend/server-build
 component/build
 component/.gradle
 .proect
