@@ -66,7 +66,7 @@ deploy-frontend:
     - pulumi up -y
     - pulumi stack select dev
     - FRONTENDURL=$(pulumi stack output  url)
-    - echo "CYPRESS_BASE_URL=$(pulumi stack output  url )" >> ../acceptanceTest/cypress.json
+    - echo "CYPRESS_BASE_URL=$(pulumi stack output  url )" >> ../../acceptanceTest/cypress.json
     - cd ../..  
   dependencies:
       - build-frontend
@@ -99,20 +99,20 @@ deploy-backend:
     - pulumi login
     - pulumi stack select dev
     - pulumi up -y
-    - echo "BACKEND_URL=$(pulumi stack output  url )" >> ../../acceptancetest/deploy.env
+    - echo "BACKEND_URL=$(pulumi stack output  url )" > ../../backendAcceptanceTest/deploy.env
     - cd ../..
   dependencies:
       - build-backend
   artifacts:
     paths:
       - ./component/src/main/resources/staging.application.properites
-      - ./component/deployment/deploy.env
+      - ./backendAcceptanceTest/deploy.env
 
 backend-acceptrance-test:
    stage: acceptance-test
    image: java:8
    script:
-     - cd acceptancetest
+     - cd backendAcceptanceTest
      - echo "$BACKEND_URL"
      - export << deploy.env
      - echo $BACKEN_URL
