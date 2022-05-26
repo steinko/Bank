@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import SSRApp from "../SSRApp";
+const { worker } = require('../mocks/browser')
 
 const indexFile = `
 <!DOCTYPE html>
@@ -22,23 +23,30 @@ const indexFile = `
   </body>
 </html>`;
 
+
  exports.handler = async function (event) {
   try {
+	    console.log(process.env.REACT_APP_USE_MSW)  // eslint-disable-line
+        const useMock = process.env.REACT_APP_USE_MSW  // eslint-disable-line
+
+       if (useMock) {
+            worker.start()
+        }
   
-    const app = ReactDOMServer.renderToString(<SSRApp  />);
-    module.hot.accept();
-    const html = indexFile.replace(
-      '<div id="root"></div>',
-      `<div id="root">${app}</div>`
-    );
-    return {
-      statusCode: 200,
-      headers: { "Content-Type": "text/html" },
-      body: html,
-    };
-  } catch (error) {
-    console.log(`Error ${error.message}`);
-    return `Error ${error}`;
-  }
+        const app = ReactDOMServer.renderToString(<SSRApp  />);
+        module.hot.accept();
+        const html = indexFile.replace(
+       '<div id="root"></div>',
+       `<div id="root">${app}</div>`
+       );
+       return {
+         statusCode: 200,
+         headers: { "Content-Type": "text/html" },
+         body: html,
+        };
+     } catch (error) {
+       console.log(`Error ${error.message}`);
+       return `Error ${error}`;
+     }
 };
 

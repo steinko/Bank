@@ -7,5 +7,10 @@ export const frontend = new aws.lambda.Function("frontend", {
     role: iamRoleLamda.arn,
     runtime: "nodejs12.x",
     handler:"index.handler",
-    name: "frontend"
+    name: "frontend",
+    environment: {
+        variables: {
+            REACT_APP_USE_MSW:'false'
+        },
+    },
 });

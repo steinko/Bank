@@ -5,7 +5,13 @@ import App from './app/App';
 import * as serviceWorker from './serviceWorker'
 const { worker } = require('./mocks/browser')
 
-worker.start()
+console.log(process.env.REACT_APP_USE_MSW)  // eslint-disable-line
+const useMock = process.env.REACT_APP_USE_MSW  // eslint-disable-line
+
+if (useMock) {
+    worker.start()
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

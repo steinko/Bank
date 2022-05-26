@@ -11,7 +11,7 @@ build-backend:
   stage: build
   script:
     - cd component 
-    - ./gradlew clean assemble -PdisableIntegrationTests
+    - ./gradlew clean assemble 
     - cd ..
   artifacts:
     paths:
@@ -41,7 +41,7 @@ test-backend:
   stage: integration-test
   script:
     - cd component 
-    - ./gradlew check -PdisableIntegrationTests
+    - ./gradlew check
  
 test-frontend:
   image: node:lts
@@ -66,7 +66,7 @@ deploy-frontend:
     - pulumi up -y
     - pulumi stack select dev
     - FRONTENDURL=$(pulumi stack output  url)
-    - echo "CYPRESS_BASE_URL=$(pulumi stack output  url )" >> ../../acceptanceTest/cypress.json
+    - echo "baseUrl:"$(pulumi stack output  url )" >> ../../acceptanceTest/cypress.json
     - cd ../..  
   dependencies:
       - build-frontend
@@ -75,7 +75,7 @@ deploy-frontend:
     url: $FRONTENDUR
   artifacts:
     paths:
-      - ./acceptance/cypress.json
+      - ./acceptanceTest/cypress.json
     
  
 deploy-backend:
@@ -99,6 +99,7 @@ deploy-backend:
     - pulumi login
     - pulumi stack select dev
     - pulumi up -y
+    - export ENVIROMENT=staging
     - echo "BACKEND_URL=$(pulumi stack output  url )" > ../../backendAcceptanceTest/deploy.env
     - cd ../..
   dependencies:
@@ -119,6 +120,19 @@ backend-acceptrance-test:
      - ./gradlew cucumber
    dependencies:
       - deploy-backend
+
+acceptrance-test:
+   stage: acceptance-test
+   image: node:lts
+   script:
+     - cd acceptanceTest
+     - npm i
+     - npm run cypress-run
+   dependencies:
+      - deploy-backend
+      - deploy-frontend
+
+
 
 destroy-backend:
   stage: destroy
