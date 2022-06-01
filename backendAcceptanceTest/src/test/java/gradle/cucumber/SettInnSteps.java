@@ -40,7 +40,7 @@ public class SettInnSteps {
 	@Given("Jer person med person id {string}")
 	public void jer_person_med_person_id(String personId) throws Exception { 
 		   
-		   this.backendUrl = System.getenv("BACKEND_URL");
+		   this.backendUrl = System.getenv("REACT_APP_BACKEND_URL");
 		   logger.info("Backend url: " + this.backendUrl);
     	   if (backendUrl==null) throw new Exception("No envioment variable");
 		
