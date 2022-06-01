@@ -7,7 +7,7 @@ stages:
 variables:
   FRONTEND_URL: " "
   BACKEND_URL: " "
-  DATABASE_URL: " "
+  ADATABASE_URL: " "
   
 build-backend:
   image: java:8
@@ -97,7 +97,7 @@ deploy-backend:
     - pulumi login
     - pulumi stack select dev
     - pulumi up -y
-    - export DATABASE_URL=$DATABASE_URL
+    - export DATABASE_URL="$ADATABASE_URL"
     - BACKEND_URL=$(pulumi stack output  url)
     - cd ../..
  
@@ -107,9 +107,9 @@ backend-acceptance-test:
    image: java:8
    script:
      - cd backendAcceptanceTest
-     - export REACT_APP_BACKEND_URL=$BACKEND_URL
+     - export REACT_APP_BACKEND_URL="$BACKEND_URL"
      - echo $REACT_APP_BACKEND_URL
-     - export DATABASE_URL=$DATABASE_URL
+     - export DATABASE_URL="$ADATABASE_URL"
      - echo $DATABASE_URL
      - ./gradlew cucumber
   
@@ -119,14 +119,14 @@ acceptrance-test:
    image: node:lts
    script:
      - cd acceptanceTest
-     - npm i
-     - ./node_modules/.bin/cypress install --force
-     - export CYPRESS_BASE_URL=$FRONTEND_URL
-     - export REACT_APP_FRONTEND_URL=$FRONTEND_URL
+     - npm ci
+     - npm run start:ci &
+     - export CYPRESS_BASE_URL="$FRONTEND_URL"
+     - export REACT_APP_FRONTEND_URL="$FRONTEND_URL"
      - echo $REACT_APP_FRONTEND_URL
-     - export REACT_APP_BACKEND_URL=$BACKEND_URL
+     - export REACT_APP_BACKEND_URL="$BACKEND_URL"
      - echo $REACT_APP_BACKEN_URL
-     - export DATABASE_URL=$DATABASE_URL
+     - export DATABASE_URL="$ADATABASE_URL"
      - echo $DATABASE_URL
      - npm run cypress-run
    
