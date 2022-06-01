@@ -89,6 +89,7 @@ deploy-backend:
     - pulumi stack select dev
     - pulumi up -y
     - ADATABASE_URL=$(pulumi stack output  endpoint)
+    - echo "$ADATABASE_URL"
     - cd ../..  
     - cd component 
     - cd deployment
@@ -98,7 +99,9 @@ deploy-backend:
     - pulumi stack select dev
     - pulumi up -y
     - export DATABASE_URL="$ADATABASE_URL"
+    - echo $DATABASE_URL
     - BACKEND_URL=$(pulumi stack output  url)
+    - echo "$BACKEND_URL"
     - cd ../..
  
 
@@ -107,8 +110,10 @@ backend-acceptance-test:
    image: java:8
    script:
      - cd backendAcceptanceTest
+     - echo "$BACKEND_URL"
      - export REACT_APP_BACKEND_URL="$BACKEND_URL"
      - echo $REACT_APP_BACKEND_URL
+     - echo "$ADATABASE_URL"
      - export DATABASE_URL="$ADATABASE_URL"
      - echo $DATABASE_URL
      - ./gradlew cucumber
