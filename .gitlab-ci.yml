@@ -53,7 +53,7 @@ test-frontend:
     - cd frontend 
     - npm i
     - export REACT_APP_USE_MSW=true
-    - export REACT_APP_BACKEND_URL=http://localhost:2000
+    - export REACT_APP_BACKEND_URL=http://localhost:3000
     - npm test
 
 deploy-frontend:
