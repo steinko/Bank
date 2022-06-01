@@ -88,7 +88,7 @@ deploy-backend:
     - pulumi login
     - pulumi stack select dev
     - pulumi up -y
-    - DATABASE_URL=$(pulumi stack output  endpoint)
+    - ADATABASE_URL=$(pulumi stack output  endpoint)
     - cd ../..  
     - cd component 
     - cd deployment
@@ -116,16 +116,16 @@ backend-acceptance-test:
    
 acceptrance-test:
    stage: acceptance-test
-   image: node:lts
+   image: cypress/base:lts
    script:
      - cd acceptanceTest
      - npm ci
-     - npm run start:ci &
      - export CYPRESS_BASE_URL="$FRONTEND_URL"
+     - echo $CYPRESS_BASE_URL
      - export REACT_APP_FRONTEND_URL="$FRONTEND_URL"
      - echo $REACT_APP_FRONTEND_URL
      - export REACT_APP_BACKEND_URL="$BACKEND_URL"
-     - echo $REACT_APP_BACKEN_URL
+     - echo $REACT_APP_BACKEND_URL
      - export DATABASE_URL="$ADATABASE_URL"
      - echo $DATABASE_URL
      - npm run cypress-run
