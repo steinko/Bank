@@ -48,7 +48,7 @@ test-backend:
  
 test-frontend:
   image: node:lts
-  stage: integration-test
+  stage: continuose-integration
   script:
     - cd frontend 
     - npm i
