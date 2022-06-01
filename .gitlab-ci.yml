@@ -5,8 +5,8 @@ stages:
   - acceptance-test
   - destroy
 variables:
-  FRONTEND_URL: " "
-  BACKEND_URL: " "
+  REACT_APP_FRONTEND_URL: " "
+  REACT_APP_BACKEND_URL: " "
   DATABASE_URL: " "
   
 build-backend:
@@ -53,6 +53,7 @@ test-frontend:
     - cd frontend 
     - npm i
     - export REACT_APP_USE_MSW=true
+    - export REACT_APP_BACKEND_URL=http://localhost:2000
     - npm test
 
 deploy-frontend:
