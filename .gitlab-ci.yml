@@ -166,5 +166,3 @@ destroy-frontend:
     - pulumi stack select dev
     - pulumi destroy -y
     - cd ../.. 
-     
-     
