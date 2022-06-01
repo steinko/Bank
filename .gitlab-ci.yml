@@ -121,7 +121,7 @@ acceptrance-test:
      - cd acceptanceTest
      - npm ci
      - export CYPRESS_BASE_URL="$FRONTEND_URL"
-     - acho "$FRONTEND_URL"
+     - echo "$FRONTEND_URL"
      - echo $CYPRESS_BASE_URL
      - export REACT_APP_FRONTEND_URL="$FRONTEND_URL"
      - echo $REACT_APP_FRONTEND_URL
