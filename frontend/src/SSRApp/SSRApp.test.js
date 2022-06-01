@@ -1,6 +1,6 @@
 import React from 'react';
 import { render,screen } from '@testing-library/react';
-import App from './App';
+import SSRApp from './SSRApp';
 
 
 import { rest } from 'msw'
@@ -31,6 +31,6 @@ afterAll(() => {
 
 it(' should display customers name', async () => {
 	 process.env.BACKEND_URL = "http://localhost:9000"
-    render(<App />)
+    render(<SSRApp />)
     expect(await screen.findByText(/26076144574/i)).toBeInTheDocument()
 })

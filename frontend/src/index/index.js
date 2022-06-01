@@ -5,11 +5,12 @@ import App from './app/App';
 import * as serviceWorker from './serviceWorker'
 const { worker } = require('./mocks/browser')
 
-console.log(process.env.REACT_APP_USE_MSW)  // eslint-disable-line
 const useMock = process.env.REACT_APP_USE_MSW  // eslint-disable-line
+console.info(useMock) 
 
-if (useMock) {
+if (useMock==='true') {
     worker.start()
+    console.info("Worker Starter")
 }
 
 ReactDOM.render(

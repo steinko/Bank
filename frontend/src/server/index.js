@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
-import SSRApp from "../SSRApp";
+import SSRApp from "../SSRApp/SSRApp";
 const { worker } = require('../mocks/browser')
 
 const indexFile = `
@@ -29,12 +29,11 @@ const indexFile = `
 	    console.log(process.env.REACT_APP_USE_MSW)  // eslint-disable-line
         const useMock = process.env.REACT_APP_USE_MSW  // eslint-disable-line
 
-       if (useMock) {
+       if (useMock==='true') {
             worker.start()
         }
   
         const app = ReactDOMServer.renderToString(<SSRApp  />);
-        module.hot.accept();
         const html = indexFile.replace(
        '<div id="root"></div>',
        `<div id="root">${app}</div>`

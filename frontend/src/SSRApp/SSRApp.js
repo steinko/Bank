@@ -1,5 +1,5 @@
 import React from 'react';
-import Customers from './components/Customers'
+import Customers from '../components/Customers'
 
 const SSRApp = () => {
 	return (

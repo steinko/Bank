@@ -1,11 +1,13 @@
 const webpack = require('webpack')
 const path = require('path')
+ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
 module.exports = {
-  mode: 'development',
-  entry: "./src/server/index.js",
-
+ 
+  entry: { 
+	       index: "./src/server/index.js",
+  },
 
   output: {
 	globalObject: 'this',
@@ -23,12 +25,8 @@ module.exports = {
       },
     ],
   },
+
   resolve: {
     extensions: ['*', '.js', '.jsx'],
   },
-plugins: [new webpack.HotModuleReplacementPlugin()],
-devServer: {
-    static: path.resolve("server-build"),
-    hot: true,
-  },
-};
+}

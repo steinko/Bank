@@ -1,14 +1,17 @@
 image: java:8
 stages:
-  - build
-  - integration-test
+  - continuose-integration
   - deploy
   - acceptance-test
   - destroy
+variables:
+  FRONTEND_URL: " "
+  BACKEND_URL: " "
+  DATABASE_URL: " "
   
 build-backend:
   image: java:8
-  stage: build
+  stage: continuose-integration
   script:
     - cd component 
     - ./gradlew clean assemble 
@@ -19,7 +22,7 @@ build-backend:
 
 build-frontend:
   image: node:lts
-  stage: build
+  stage: continuose-integration
   before_script:
     - rm -rf /var/lib/apt/lists/*
     - apt-get update
@@ -38,7 +41,7 @@ build-frontend:
 
 test-backend:
   image: java:8
-  stage: integration-test
+  stage: continuose-integration
   script:
     - cd component 
     - ./gradlew check
@@ -49,13 +52,12 @@ test-frontend:
   script:
     - cd frontend 
     - npm i
+    - export REACT_APP_USE_MSW=true
     - npm test
 
 deploy-frontend:
   stage: deploy
   image: pulumi/pulumi-nodejs
-  variables: 
-    FRONTENDURL: " "
   script:
     - cd frontend
     - cd deployment
@@ -63,19 +65,15 @@ deploy-frontend:
     - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
     - pulumi login
     - pulumi stack select dev
+    - pulumi config set REACT_APP_USE_MSW false
     - pulumi up -y
-    - pulumi stack select dev
-    - FRONTENDURL=$(pulumi stack output  url)
-    - echo "baseUrl:"$(pulumi stack output  url )" >> ../../acceptanceTest/cypress.json
+    - FRONTEND_URL=$(pulumi stack output  url)
     - cd ../..  
   dependencies:
       - build-frontend
   environment:
-    name: staging
-    url: $FRONTENDUR
-  artifacts:
-    paths:
-      - ./acceptanceTest/cypress.json
+    name: test
+    url: $FRONTEND_URL
     
  
 deploy-backend:
@@ -89,8 +87,7 @@ deploy-backend:
     - pulumi login
     - pulumi stack select dev
     - pulumi up -y
-    - pulumi stack select dev
-    - echo "spring.datasource.url=jdbc:postgresql://$(pulumi stack output  endpoint )/mydb" >> ../../component/src/main/resources/staging.application.properites
+    - DATABASE_URL=$(pulumi stack output  endpoint)
     - cd ../..  
     - cd component 
     - cd deployment
@@ -99,41 +96,38 @@ deploy-backend:
     - pulumi login
     - pulumi stack select dev
     - pulumi up -y
-    - export ENVIROMENT=staging
-    - echo "BACKEND_URL=$(pulumi stack output  url )" > ../../backendAcceptanceTest/deploy.env
+    - export DATABASE_URL=$DATABASE_URL
+    - BACKEND_URL=$(pulumi stack output  url)
     - cd ../..
-  dependencies:
-      - build-backend
-  artifacts:
-    paths:
-      - ./component/src/main/resources/staging.application.properites
-      - ./backendAcceptanceTest/deploy.env
+ 
 
-backend-acceptrance-test:
+backend-acceptance-test:
    stage: acceptance-test
    image: java:8
    script:
      - cd backendAcceptanceTest
-     - echo "$BACKEND_URL"
-     - export << deploy.env
+     - export BACKEND_URL=$BACKEND_URL
+     - echo $BACKEN_URL
+     - export DATABASE_URL=$DATABASE_URL
      - echo $BACKEN_URL
      - ./gradlew cucumber
-   dependencies:
-      - deploy-backend
-
+  
+   
 acceptrance-test:
    stage: acceptance-test
    image: node:lts
    script:
      - cd acceptanceTest
      - npm i
+     - export CYPRESS_BASE_URL=$FRONTEND_URL
+     - export FRONTEND_URL=$FRONTEND_URL
+     - echo $FRONTEND_URL
+     - export BACKEND_URL=$BACKEND_URL
+     - echo $BACKEN_URL
+     - export DATABASE_URL=$DATABASE_URL
+     - echo $BACKEN_URL
      - npm run cypress-run
-   dependencies:
-      - deploy-backend
-      - deploy-frontend
-
-
-
+   
 destroy-backend:
   stage: destroy
   image: pulumi/pulumi-nodejs

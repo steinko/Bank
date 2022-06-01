@@ -3,16 +3,19 @@ import { render, screen } from '@testing-library/react'
 import Customers from './Customers'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
+import { backendUrl } from '../services/BackendUrl'
+
 
 const server = setupServer(
- 
-   rest.get('https://localhost:9000/customers', (req,res,ctx) => {
+    
+   rest.get(backendUrl(), (req,res,ctx) => {
 		return  res ( ctx.status(200,'Customers returned'),ctx.json([{personId:26076144574, name:"Stein Korsveien"}, {personId:11036344574, name:"Oddmund Korsveien"}]))
 		 }
     )
 )
 
 beforeEach(() => {
+  process.env.BACKEND_URL = "http://localhost:9000"
   server.listen()
 })
 
