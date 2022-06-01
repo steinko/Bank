@@ -116,17 +116,20 @@ backend-acceptance-test:
    
 acceptrance-test:
    stage: acceptance-test
-   image: cypress/base:lts
+   image: cypress/base
    script:
      - cd acceptanceTest
      - npm ci
      - export CYPRESS_BASE_URL="$FRONTEND_URL"
+     - acho "$FRONTEND_URL"
      - echo $CYPRESS_BASE_URL
      - export REACT_APP_FRONTEND_URL="$FRONTEND_URL"
      - echo $REACT_APP_FRONTEND_URL
      - export REACT_APP_BACKEND_URL="$BACKEND_URL"
+     - echo "$BACKEND_URL"
      - echo $REACT_APP_BACKEND_URL
      - export DATABASE_URL="$ADATABASE_URL"
+     - echo "$ADATABASE_URL"
      - echo $DATABASE_URL
      - npm run cypress-run
    
