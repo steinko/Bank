@@ -116,6 +116,8 @@ deploy-backend:
   artifacts:
     paths:
       - component/deployment/backend.env
+  dependencies:
+    - build-backend
  
 
 backend-acceptance-test:
