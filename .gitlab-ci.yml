@@ -6,10 +6,6 @@ stages:
   - acceptance-test
   - destroy
 
-variables:
-  FRONTEND_URL: " "
-  BACKEND_URL: " "
-  ADATABASE_URL: " "
   
 build-backend:
   image: java:8
@@ -98,9 +94,8 @@ deploy-backend:
     - pulumi login
     - pulumi stack select dev
     - pulumi up -y
-    - ADATABASE_URL=$(pulumi stack output  endpoint)
     - touch database.env
-    - echo DATABASE_URL="$ADATABASE_URL" >> database.env
+    - echo DATABASE_URL=$(pulumi stack output  endpoint) >> database.env
     - cat database.env
     - cd ../..  
     - cd component 
@@ -110,11 +105,10 @@ deploy-backend:
     - pulumi login
     - pulumi stack select dev
     - pulumi up -y
-    - export DATABASE_URL="$ADATABASE_URL"
+    - export DATABASE_URL=$(pulumi stack output  endpoint)
     - echo $DATABASE_URL
-    - BACKEND_URL=$(pulumi stack output  url)
     - touch backend.env
-    - echo REACT_APP_BACKEND_URL="$BACKEND_URL" >> backend.env
+    - echo REACT_APP_BACKEND_URL=$(pulumi stack output  url) >> backend.env
     - cat backend.env
     - cd ../..
   artifacts:
@@ -150,7 +144,7 @@ acceptrance-test:
      - echo $REACT_APP_FRONTEND_URL
      - export < ../component/deployment/backend.env
      - echo $REACT_APP_BACKEND_URL
-     - export < database.env
+     - export < ../database/deployment/database.env
      - echo $DATABASE_URL
      - npm run cypress-run
    dependencies:
