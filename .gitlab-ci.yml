@@ -109,8 +109,8 @@ deploy-backend:
     - pulumi login
     - pulumi stack select dev
     - pulumi up -y
-    - export DATABASE_URL="$ADAT
-    - echo $DATABASE_URL="$ADATABASE_URL"
+    - export DATABASE_URL="$ADATABASE_URL"
+    - echo $DATABASE_URL
     - BACKEND_URL=$(pulumi stack output  url)
     - touch backend.env
     - echo REACT_APP_BACKEND_URL="$BACKEND_URL" >> backend.env
