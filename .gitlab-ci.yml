@@ -71,8 +71,10 @@ deploy-frontend:
     - pulumi config set REACT_APP_USE_MSW false
     - pulumi up -y
     - FRONTEND_URL=$(pulumi stack output  url)
-    - echo CYPRESS_BASE_URL="$FRONTEND_URL" > cypress.env
-    - echo REACT_APP_FRONTEND_URL="$FRONTEND_URL" > frontend.env
+    - touch cypress.env
+    - echo CYPRESS_BASE_URL="$FRONTEND_URL" >> cypress.env
+    - touch frontend.env
+    - echo REACT_APP_FRONTEND_URL="$FRONTEND_URL" >> frontend.env
     - cd ../..  
   dependencies:
       - build-frontend
