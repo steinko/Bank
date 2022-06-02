@@ -26,10 +26,11 @@ const indexFile = `
 
  exports.handler = async function (event) {
   try {
-	    console.log(process.env.REACT_APP_USE_MSW)  // eslint-disable-line
+	    console.info(process.env.REACT_APP_USE_MSW)  // eslint-disable-line
         const useMock = process.env.REACT_APP_USE_MSW  // eslint-disable-line
-
+        console.info("useMock:" + useMock)
        if (useMock==='true') {
+	        console.info("useMock ===true starts worker")
             worker.start()
         }
   
