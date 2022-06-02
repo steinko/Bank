@@ -1,9 +1,11 @@
 image: java:8
+
 stages:
   - continuose-integration
   - deploy
   - acceptance-test
   - destroy
+
 variables:
   FRONTEND_URL: " "
   BACKEND_URL: " "
@@ -117,6 +119,8 @@ backend-acceptance-test:
      - export DATABASE_URL="$ADATABASE_URL"
      - echo $DATABASE_URL
      - ./gradlew cucumber
+   dependencies:
+     - deploy-backend
   
    
 acceptrance-test:
@@ -137,6 +141,8 @@ acceptrance-test:
      - echo "$ADATABASE_URL"
      - echo $DATABASE_URL
      - npm run cypress-run
+   dependencies:
+     - deploy-frontend
    
 destroy-backend:
   stage: destroy
