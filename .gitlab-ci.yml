@@ -65,6 +65,7 @@ deploy-frontend:
     - pulumi login
     - pulumi stack select dev
     - pulumi config set REACT_APP_USE_MSW false
+    - pulumi config set REACT_APP_BACKEND_URL $(cat ../../component/deployment/backend.env)
     - pulumi up -y
     - FRONTEND_URL=$(pulumi stack output  url)
     - touch cypress.env
@@ -74,6 +75,7 @@ deploy-frontend:
     - cd ../..  
   dependencies:
       - build-frontend
+      - deploy-backend
   environment:
     name: test
     url: $FRONTEND_URL
@@ -86,6 +88,8 @@ deploy-frontend:
 deploy-backend:
   stage: deploy
   image: pulumi/pulumi-nodejs
+  variables:
+     DATABASE_URL: " "
   script:
     - cd database
     - cd deployment
@@ -95,8 +99,7 @@ deploy-backend:
     - pulumi stack select dev
     - pulumi up -y
     - touch database.env
-    - echo DATABASE_URL=jdbc:postgresql://$(pulumi stack output  endpoint) >> database.env
-    - cat database.env
+    - DATABASE_URL=jdbc:postgresql://$(pulumi stack output  endpoint)
     - cd ../..  
     - cd component 
     - cd deployment
@@ -104,16 +107,14 @@ deploy-backend:
     - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
     - pulumi login
     - pulumi stack select dev
+    - pulumi config set DATABASE_URL "$DATABASE_URL" 
     - pulumi up -y
-    - export < ../../database/deployment/database.env
-    - echo $DATABASE_URL
     - touch backend.env
     - echo REACT_APP_BACKEND_URL=$(pulumi stack output  url) >> backend.env
     - cat backend.env
     - cd ../..
   artifacts:
     paths:
-      - database/deployment/database.env
       - component/deployment/backend.env
  
 
