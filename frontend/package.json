@@ -19,7 +19,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build-server": "webpack",
-    "start-server": "webpack serve --config ./webpack.dev.config.js",
+    "start-server": "webpack serve --config ./webpack.config.js",
     "watch-server": "webpack --watch"
   },
   "eslintConfig": {

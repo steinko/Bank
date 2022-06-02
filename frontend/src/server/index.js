@@ -34,7 +34,6 @@ const indexFile = `
         }
   
         const app = ReactDOMServer.renderToString(<SSRApp  />);
-        module.hot.accept();
         const html = indexFile.replace(
        '<div id="root"></div>',
        `<div id="root">${app}</div>`
