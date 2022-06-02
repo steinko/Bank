@@ -95,7 +95,7 @@ deploy-backend:
     - pulumi stack select dev
     - pulumi up -y
     - touch database.env
-    - echo DATABASE_URL=$(pulumi stack output  endpoint) >> database.env
+    - echo DATABASE_URL=jdbc:postgresql://$(pulumi stack output  endpoint) >> database.env
     - cat database.env
     - cd ../..  
     - cd component 
@@ -105,7 +105,7 @@ deploy-backend:
     - pulumi login
     - pulumi stack select dev
     - pulumi up -y
-    - export DATABASE_URL=$(pulumi stack output  endpoint)
+    - export < ../../database/deployment/database.env
     - echo $DATABASE_URL
     - touch backend.env
     - echo REACT_APP_BACKEND_URL=$(pulumi stack output  url) >> backend.env
@@ -124,8 +124,6 @@ backend-acceptance-test:
      - cd backendAcceptanceTest
      - export < ../component/deployment/backend.env
      - echo $REACT_APP_BACKEND_URL
-     - export < ../database/deployment/database,env
-     - echo $DATABASE_URL
      - ./gradlew cucumber
    dependencies:
      - deploy-backend
@@ -138,18 +136,10 @@ acceptrance-test:
      - cd acceptanceTest
      - npm ci
      - export < ../frontend/deployment/cypress.env
-     - echo "$FRONTEND_URL"
      - echo $CYPRESS_BASE_URL
-     - export < ../frontend/deployment/frontend.env
-     - echo $REACT_APP_FRONTEND_URL
-     - export < ../component/deployment/backend.env
-     - echo $REACT_APP_BACKEND_URL
-     - export < ../database/deployment/database.env
-     - echo $DATABASE_URL
      - npm run cypress-run
    dependencies:
      - deploy-frontend
-     - deploy-backend
    
 destroy-backend:
   stage: destroy
