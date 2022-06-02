@@ -71,8 +71,8 @@ deploy-frontend:
     - pulumi config set REACT_APP_USE_MSW false
     - pulumi up -y
     - FRONTEND_URL=$(pulumi stack output  url)
-    - CYPRESS_BASE_URL="$FRONTEND_URL"> cypress.env
-    - REACT_APP_FRONTEND_URL="$FRONTEND_URL">frontned.env
+    - echo CYPRESS_BASE_URL="$FRONTEND_URL" > cypress.env
+    - echo REACT_APP_FRONTEND_URL="$FRONTEND_URL" > frontend.env
     - cd ../..  
   dependencies:
       - build-frontend
@@ -97,7 +97,7 @@ deploy-backend:
     - pulumi stack select dev
     - pulumi up -y
     - ADATABASE_URL=$(pulumi stack output  endpoint)
-    - DATABASE_URL="$ADATABASE_URL" > database.env
+    - echo DATABASE_URL="$ADATABASE_URL" > database.env
     - cd ../..  
     - cd component 
     - cd deployment
@@ -109,7 +109,7 @@ deploy-backend:
     - export DATABASE_URL="$ADATABASE_URL"
     - echo $DATABASE_URL
     - BACKEND_URL=$(pulumi stack output  url)
-    - REACT_APP_BACKEND_URL="$BACKEND_URL" > backend.env
+    - echo REACT_APP_BACKEND_URL="$BACKEND_URL" > backend.env
     - cd ../..
   artifacts:
     paths:
