@@ -83,8 +83,8 @@ deploy-frontend:
     url: $FRONTEND_URL
   artifacts:
    paths:
-     - cypress.env
-     - frontend.env
+     - frontend/deployment/cypress.env
+     - frontend/deployment/frontend.env
     
  
 deploy-backend:
@@ -99,7 +99,8 @@ deploy-backend:
     - pulumi stack select dev
     - pulumi up -y
     - ADATABASE_URL=$(pulumi stack output  endpoint)
-    - echo DATABASE_URL="$ADATABASE_URL" > database.env
+    - touch database.env
+    - echo DATABASE_URL="$ADATABASE_URL" >> database.env
     - cd ../..  
     - cd component 
     - cd deployment
@@ -108,15 +109,16 @@ deploy-backend:
     - pulumi login
     - pulumi stack select dev
     - pulumi up -y
-    - export DATABASE_URL="$ADATABASE_URL"
-    - echo $DATABASE_URL
+    - export DATABASE_URL="$ADAT
+    - echo $DATABASE_URL="$ADATABASE_URL"
     - BACKEND_URL=$(pulumi stack output  url)
-    - echo REACT_APP_BACKEND_URL="$BACKEND_URL" > backend.env
+    - touch backend.env
+    - echo REACT_APP_BACKEND_URL="$BACKEND_URL" >> backend.env
     - cd ../..
   artifacts:
     paths:
-      - database.env
-      - backend.env
+      - database/deployment/database.env
+      - component/deployment/backend.env
  
 
 backend-acceptance-test:
@@ -124,9 +126,9 @@ backend-acceptance-test:
    image: java:8
    script:
      - cd backendAcceptanceTest
-     - export < backend.env
+     - export < ../component/deployment/backend.env
      - echo $REACT_APP_BACKEND_URL
-     - export < database,env
+     - export < ../database/deployment/database,env
      - echo $DATABASE_URL
      - ./gradlew cucumber
    dependencies:
