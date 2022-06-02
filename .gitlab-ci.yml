@@ -71,12 +71,18 @@ deploy-frontend:
     - pulumi config set REACT_APP_USE_MSW false
     - pulumi up -y
     - FRONTEND_URL=$(pulumi stack output  url)
+    - CYPRESS_BASE_URL="$FRONTEND_URL"> cypress.env
+    - REACT_APP_FRONTEND_URL="$FRONTEND_URL">frontned.env
     - cd ../..  
   dependencies:
       - build-frontend
   environment:
     name: test
     url: $FRONTEND_URL
+  artifacts:
+   paths:
+     - cypress.env
+     - frontend.env
     
  
 deploy-backend:
@@ -91,7 +97,7 @@ deploy-backend:
     - pulumi stack select dev
     - pulumi up -y
     - ADATABASE_URL=$(pulumi stack output  endpoint)
-    - echo "$ADATABASE_URL"
+    - DATABASE_URL="$ADATABASE_URL" > database.env
     - cd ../..  
     - cd component 
     - cd deployment
@@ -103,8 +109,12 @@ deploy-backend:
     - export DATABASE_URL="$ADATABASE_URL"
     - echo $DATABASE_URL
     - BACKEND_URL=$(pulumi stack output  url)
-    - echo "$BACKEND_URL"
+    - REACT_APP_BACKEND_URL="$BACKEND_URL" > backend.env
     - cd ../..
+  artifacts:
+    paths:
+      - database.env
+      - backend.env
  
 
 backend-acceptance-test:
@@ -112,11 +122,9 @@ backend-acceptance-test:
    image: java:8
    script:
      - cd backendAcceptanceTest
-     - echo "$BACKEND_URL"
-     - export REACT_APP_BACKEND_URL="$BACKEND_URL"
+     - export < backend.env
      - echo $REACT_APP_BACKEND_URL
-     - echo "$ADATABASE_URL"
-     - export DATABASE_URL="$ADATABASE_URL"
+     - export < database,env
      - echo $DATABASE_URL
      - ./gradlew cucumber
    dependencies:
@@ -129,20 +137,18 @@ acceptrance-test:
    script:
      - cd acceptanceTest
      - npm ci
-     - export CYPRESS_BASE_URL="$FRONTEND_URL"
+     - export < cypress.env
      - echo "$FRONTEND_URL"
      - echo $CYPRESS_BASE_URL
-     - export REACT_APP_FRONTEND_URL="$FRONTEND_URL"
-     - echo $REACT_APP_FRONTEND_URL
-     - export REACT_APP_BACKEND_URL="$BACKEND_URL"
-     - echo "$BACKEND_URL"
+     - export < frontend.env
+     - export < backend.env
      - echo $REACT_APP_BACKEND_URL
-     - export DATABASE_URL="$ADATABASE_URL"
-     - echo "$ADATABASE_URL"
+     - export < database.env
      - echo $DATABASE_URL
      - npm run cypress-run
    dependencies:
      - deploy-frontend
+     - deploy-backend
    
 destroy-backend:
   stage: destroy
