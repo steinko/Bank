@@ -122,6 +122,7 @@ backend-acceptance-test:
    image: java:8
    script:
      - cd backendAcceptanceTest
+     - cat ../component/deployment/backend.env
      - export < ../component/deployment/backend.env
      - echo $REACT_APP_BACKEND_URL
      - ./gradlew cucumber
@@ -135,6 +136,7 @@ acceptrance-test:
    script:
      - cd acceptanceTest
      - npm ci
+     - cat ../frontend/deployment/cypress.env
      - export < ../frontend/deployment/cypress.env
      - echo $CYPRESS_BASE_URL
      - npm run cypress-run
