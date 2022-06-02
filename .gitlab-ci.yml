@@ -101,6 +101,7 @@ deploy-backend:
     - ADATABASE_URL=$(pulumi stack output  endpoint)
     - touch database.env
     - echo DATABASE_URL="$ADATABASE_URL" >> database.env
+    - cat database.env
     - cd ../..  
     - cd component 
     - cd deployment
@@ -114,6 +115,7 @@ deploy-backend:
     - BACKEND_URL=$(pulumi stack output  url)
     - touch backend.env
     - echo REACT_APP_BACKEND_URL="$BACKEND_URL" >> backend.env
+    - cat backend.env
     - cd ../..
   artifacts:
     paths:
@@ -141,11 +143,12 @@ acceptrance-test:
    script:
      - cd acceptanceTest
      - npm ci
-     - export < cypress.env
+     - export < ../frontend/deployment/cypress.env
      - echo "$FRONTEND_URL"
      - echo $CYPRESS_BASE_URL
-     - export < frontend.env
-     - export < backend.env
+     - export < ../frontend/deployment/frontend.env
+     - echo $REACT_APP_FRONTEND_URL
+     - export < ../component/deployment/backend.env
      - echo $REACT_APP_BACKEND_URL
      - export < database.env
      - echo $DATABASE_URL
