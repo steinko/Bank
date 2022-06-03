@@ -127,7 +127,7 @@ backend-acceptance-test:
    script:
      - cd backendAcceptanceTest
      - cat ../component/deployment/backend.env
-     - export $REACT_APP_BACKEND_URL=$(cat ../component/deployment/backend.env)
+     - export REACT_APP_BACKEND_URL=$(cat ../component/deployment/backend.env)
      - echo $REACT_APP_BACKEND_URL
      - ./gradlew cucumber
    dependencies:
