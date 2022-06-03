@@ -111,7 +111,7 @@ deploy-backend:
     - pulumi config set DATABASE_URL "$DATABASE_URL" 
     - pulumi up -y
     - touch backend.env
-    - echo REACT_APP_BACKEND_URL=$(pulumi stack output  url) >> backend.env
+    - echo $(pulumi stack output  url) >> backend.env
     - cat backend.env
     - cd ../..
   artifacts:
