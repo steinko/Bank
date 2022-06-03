@@ -2,7 +2,8 @@ image: java:8
 
 stages:
   - continuose-integration
-  - deploy
+  - deploy-backend
+  - deploy-frontend
   - acceptance-test
   - destroy
 
@@ -55,7 +56,7 @@ test-frontend:
     - npm test
 
 deploy-frontend:
-  stage: deploy
+  stage: deploy-frontend
   image: pulumi/pulumi-nodejs
   script:
     - cd frontend
@@ -86,7 +87,7 @@ deploy-frontend:
     
  
 deploy-backend:
-  stage: deploy
+  stage: deploy-bakend
   image: pulumi/pulumi-nodejs
   variables:
      DATABASE_URL: " "
