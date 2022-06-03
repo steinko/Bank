@@ -50,7 +50,7 @@ public class SettInnSteps {
 		   JSONObject person = new JSONObject();
 		   person.put("personId",this.personId);
 		   String body = person.toJSONString();
-		   String createCustomerUrl = this.backendUrl + "/customer";
+		   String createCustomerUrl = this.backendUrl + "customer";
 		   logger.info("Create customer url: " + createCustomerUrl);
 		 
 		   given().
