@@ -87,7 +87,7 @@ deploy-frontend:
     
  
 deploy-backend:
-  stage: deploy-bakend
+  stage: deploy-backend
   image: pulumi/pulumi-nodejs
   variables:
      DATABASE_URL: " "
