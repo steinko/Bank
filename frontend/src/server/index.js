@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import SSRApp from "../SSRApp/SSRApp";
-const { worker } = require('../mocks/browser')
 
 const indexFile = `
 <!DOCTYPE html>
