@@ -11,6 +11,8 @@ stages:
   
 build-backend:
   image: amazoncorretto:11
+  services: 
+    - ubuntu
   stage: continuose-integration
   before_script:
     - rm -rf /var/lib/apt/lists/*
