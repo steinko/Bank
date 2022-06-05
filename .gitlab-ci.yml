@@ -12,7 +12,7 @@ build-backend:
   image: amazoncorretto:11
   stage: continuose-integration
   before_script:
-    - apt add zip 
+    - apk add zip 
   script:
     - cd component 
     - ./gradlew clean assemble
