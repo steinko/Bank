@@ -12,9 +12,6 @@ stages:
 build-backend:
   image: amazoncorretto:11
   stage: continuose-integration
-  before_script:
-    - uname -a
-    - rpm -i zip 
   script:
     - cd component 
     - ./gradlew clean assemble
