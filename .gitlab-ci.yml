@@ -1,5 +1,7 @@
 default:
-  image: java:8
+  image: java
+before_script:
+    - apk add zip 
 stages:
   - continuose-integration
   - deploy-backend
@@ -12,7 +14,8 @@ build-backend:
   image: amazoncorretto:11
   stage: continuose-integration
   before_script:
-    - apk add zip 
+    - uname -a
+    - apt install zip 
   script:
     - cd component 
     - ./gradlew clean assemble
