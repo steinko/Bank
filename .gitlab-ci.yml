@@ -1,3 +1,5 @@
+default:
+  image: java:8
 stages:
   - continuose-integration
   - deploy-backend
