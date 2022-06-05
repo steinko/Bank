@@ -8,7 +8,7 @@ console.log(databaseUrl)
 
 export const backend = new aws.lambda.Function("backend", {
 	name: "backend",
-    code: new pulumi.asset.FileArchive("../build/libs/component.jar"),
+    code: new pulumi.asset.FileArchive("../build/libs/component.zip"),
     role: iamRoleLamda.arn,
     handler: "org.steinko.bank.WebServer::handleRequest",
     runtime: "java11",

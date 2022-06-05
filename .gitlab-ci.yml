@@ -9,13 +9,19 @@ stages:
 build-backend:
   image: amazoncorretto:11
   stage: continuose-integration
+  before_script:
+    - rm -rf /var/lib/apt/lists/*
+    - apt-get update
+    - apt-cache gencaches
+    - apt-get install -y zip 
   script:
     - cd component 
-    - ./gradlew clean assemble 
+    - ./gradlew clean assemble
+    - zip build/libs/component.zip  build/libs/component.jar
     - cd ..
   artifacts:
     paths:
-      - component/build/libs/component.jar
+      - component/build/libs/component.zip
 
 build-frontend:
   image: node:lts
