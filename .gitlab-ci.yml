@@ -7,7 +7,7 @@ stages:
 
   
 build-backend:
-  image: java:11
+  image: amazoncorretto:11
   stage: continuose-integration
   script:
     - cd component 
@@ -37,7 +37,7 @@ build-frontend:
       - frontend/server-build/index.zip
 
 test-backend:
-  image: java:11
+  image: amazoncorretto:11
   stage: continuose-integration
   script:
     - cd component 
@@ -121,7 +121,7 @@ deploy-backend:
 
 backend-acceptance-test:
    stage: acceptance-test
-   image: java:11
+   image: amazoncorretto:11
    script:
      - cd backendAcceptanceTest
      - cat ../component/deployment/backend.env
