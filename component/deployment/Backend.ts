@@ -11,7 +11,7 @@ export const backend = new aws.lambda.Function("backend", {
     code: new pulumi.asset.FileArchive("../build/libs/component.jar"),
     role: iamRoleLamda.arn,
     handler: "org.steinko.bank.WebServer",
-    runtime: "java8",
+    runtime: "java11",
      environment: {
         variables: {
             DATABASE_URL: databaseUrl
