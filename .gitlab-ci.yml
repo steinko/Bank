@@ -12,7 +12,7 @@ build-backend:
   stage: continuose-integration
   script:
     - cd component 
-    - ./gradlew clean assemble
+    - ./gradlew clean build
     - cd ..
   artifacts:
     paths:
