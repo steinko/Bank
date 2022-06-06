@@ -3,6 +3,7 @@ package org.steinko.bank.bankaccount;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.steinko.bank.bankaccount.BankAccount;
 import org.steinko.bank.bankaccount.BankAccountRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,10 +15,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Integration test to verify that BankAccout is stored in h2 database 
+ * Integration test to verify that BankAccout is stored in  database 
  * with use of Bank Account Repositiry
  */
-@ActiveProfiles("dev")
+@Disabled
 @DataJpaTest
 public class BankAccountRepositoryIT {
  

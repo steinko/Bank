@@ -25,7 +25,7 @@ import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.Matchers.equalTo;
 import org.springframework.test.web.servlet.MockMvc;
 	
-
+@Disabled
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public class BankAccountControllerIT {
 		

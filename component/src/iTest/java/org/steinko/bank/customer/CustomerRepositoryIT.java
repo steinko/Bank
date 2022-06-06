@@ -1,6 +1,7 @@
 package org.steinko.bank.customer;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,7 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
  * is stored in a database 
  * with use of Customer Repository.
  */
-@ActiveProfiles("dev")
+@Disabled
 @DataJpaTest
 public class CustomerRepositoryIT {
 	
@@ -38,7 +39,7 @@ public class CustomerRepositoryIT {
 	   @Autowired
 	   private BankAccountRepository bankAccountRepository;
 	   
-
+     
 	  @BeforeEach
 	  public void setUp() {
 		  customerRepository.deleteAll();
@@ -49,6 +50,7 @@ public class CustomerRepositoryIT {
 	   /**
 	   * Test save customer object to customer repository.
 	   */
+	  @Disabled
 	  @Test
 	    public void shouldSaveCustomer() {
 		  
@@ -69,6 +71,7 @@ public class CustomerRepositoryIT {
 	  /**
 	   * Test delete customer object from database.
 	   */
+	  @Disabled
 	  @Test
 	    public void shouldDeleteBackAccount() {
 		  Long personId;
@@ -83,6 +86,7 @@ public class CustomerRepositoryIT {
 	  /**
 	   * Test saving of two bank accounts object to database.
 	   */
+	  @Disabled
 	  @Test
 	    public void shouldHaveTwoCustomers() {
 		  Long personId1;

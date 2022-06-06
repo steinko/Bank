@@ -10,7 +10,7 @@ export const backend = new aws.lambda.Function("backend", {
 	name: "backend",
     code: new pulumi.asset.FileArchive("../build/libs/component.zip"),
     role: iamRoleLamda.arn,
-    handler: "org.steinko.bank.WebServer::handleRequest",
+    handler: "org.steinko.bank.StreamLambdaHandler::handleRequest",
     runtime: "java11",
      environment: {
         variables: {

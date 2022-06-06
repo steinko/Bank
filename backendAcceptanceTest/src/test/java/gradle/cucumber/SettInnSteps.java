@@ -76,14 +76,14 @@ public class SettInnSteps {
 		  pathParam("personId", this.personId). 
 		  pathParam("amount", amount). 
 	    when().
-          put(this.backendUrl + "/savingsaccount/{personId}/{amount}").  
+          put(this.backendUrl + "savingsaccount/{personId}/{amount}").  
         then().
           statusCode(200); 
 		
 		given().
 		  pathParam("personId", this.personId). 
 	    when().
-           get(this.backendUrl + "/savingsaccount/{personId}").  
+           get(this.backendUrl + "savingsaccount/{personId}").  
         then().
            statusCode(200).
            body("balance",equalTo(balance));
@@ -97,7 +97,7 @@ public class SettInnSteps {
 		  pathParam("personId", this.personId). 
 		  pathParam("amount", amount).
 	    when().
-          put(this.backendUrl + "/savingsaccount/{personId}/{amount}").  
+          put(this.backendUrl + "savingsaccount/{personId}/{amount}").  
         then().
           statusCode(200);  
 	}
@@ -109,7 +109,7 @@ public class SettInnSteps {
 		given().
 		  pathParam("personId", this.personId). 
 	    when().
-          get( this.backendUrl + "/savingsaccount/{personId}").  
+          get( this.backendUrl + "savingsaccount/{personId}").  
         then().
           statusCode(200).
           body("balance",equalTo(balance));

@@ -34,7 +34,7 @@ import org.json.JSONException;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import static org.mockito.BDDMockito.when;
 
-
+@Disabled
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public class CustomerControllerIT  {
 	
