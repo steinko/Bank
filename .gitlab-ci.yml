@@ -13,6 +13,7 @@ build-backend:
   script:
     - cd component 
     - ./gradlew clean build
+    - zipinfo build/distributions/backend.zip
     - cd ..
   artifacts:
     paths:
