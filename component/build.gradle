@@ -18,6 +18,12 @@ compileJava {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'org.steinko.bank.WebServer'
+    }
+}
+
 sonarqube {
     properties {
         property "sonar.sourceEncoding", "UTF-8"
