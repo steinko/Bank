@@ -11,7 +11,7 @@ build-backend:
   image: amazoncorretto:11
   stage: continuose-integration
   before_script:
-    - yum install zip
+    - yum -y install zip
   script:
     - cd component 
     - ./gradlew clean assemble
