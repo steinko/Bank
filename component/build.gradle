@@ -89,7 +89,7 @@ jacocoTestReport {
 }
 
 task buildZip(type: Zip) {
-    baseName = 'springBootServer'
+    baseName = 'backend'
     from compileJava
     from processResources
     into('lib') {

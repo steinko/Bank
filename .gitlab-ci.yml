@@ -10,16 +10,13 @@ stages:
 build-backend:
   image: amazoncorretto:11
   stage: continuose-integration
-  before_script:
-    - yum -y install zip
   script:
     - cd component 
     - ./gradlew clean assemble
-    - zip build/libs/component.zip  build/libs/component.jar
     - cd ..
   artifacts:
     paths:
-      - component/build/libs/component.zip
+      - component/build/distributions/backend.zip
 
 build-frontend:
   image: node:lts
