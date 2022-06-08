@@ -65,6 +65,7 @@ deploy-frontend:
     - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
     - pulumi login
     - pulumi stack select dev
+    - pulumi config set aws:region eu-north-1
     - pulumi config set REACT_APP_USE_MSW false
     - pulumi config set REACT_APP_BACKEND_URL $(cat ../../component/deployment/backend.env)
     - pulumi up -y
@@ -98,6 +99,7 @@ deploy-backend:
     - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
     - pulumi login
     - pulumi stack select dev
+    - pulumi config set aws:region eu-north-1
     - pulumi up -y
     - touch database.env
     - DATABASE_URL=jdbc:postgresql://$(pulumi stack output  endpoint)
