@@ -63,6 +63,8 @@ deploy-frontend:
     - cd deployment
     - npm i
     - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
+    - export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
+    - export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
     - pulumi login
     - pulumi stack select dev
     - pulumi config set aws:region eu-north-1
@@ -97,6 +99,8 @@ deploy-backend:
     - cd deployment
     - npm i
     - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
+    - export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
+    - export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
     - pulumi login
     - pulumi stack select dev
     - pulumi config set aws:region eu-north-1
@@ -108,6 +112,8 @@ deploy-backend:
     - cd deployment
     - npm i
     - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
+    - export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
+    - export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
     - pulumi login
     - pulumi stack select dev
     - pulumi config set DATABASE_URL "$DATABASE_URL" 
@@ -165,6 +171,8 @@ destroy-backend:
     - cd deployment
     - npm i
     - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
+    - export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
+    - export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
     - pulumi login
     - pulumi stack select dev
     - pulumi destroy -y
@@ -178,6 +186,8 @@ destroy-frontend:
     - cd deployment
     - npm i
     - export PULUMI_ACCESS_TOKEN="$PULUMI_ACCESS_TOKEN"
+    - export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
+    - export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
     - pulumi login
     - pulumi stack select dev
     - pulumi destroy -y
