@@ -13,11 +13,11 @@ build-backend:
   script:
     - cd component 
     - ./gradlew clean build
-    - zipinfo build/distributions/backend.zip
     - cd ..
   artifacts:
     paths:
-      - component/build/distributions/backend.zip
+      - component/build/libs/component.jar
+      - component/build/libs/component-plain.jar
 
 build-frontend:
   image: node:lts
